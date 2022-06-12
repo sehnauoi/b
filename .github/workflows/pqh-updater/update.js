@@ -227,7 +227,7 @@
          });
 
          // GET ALL UNIT DATA
-         result = await db.all('SELECR * FROM unit_data');
+         result = await db.all('SELECT * FROM unit_data');
          result.forEach((row) => {
             const unit_id = (row.unit_id).toString();
          });
