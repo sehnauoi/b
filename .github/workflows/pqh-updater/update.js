@@ -229,7 +229,7 @@
          // GET ALL UNIT DATA
          result = await db.all('SELECT * FROM unit_data');
          result.forEach((row) => {
-            const unit_id = (row.unit_id).toString();
+            (row.unit_id).toString();
          });
 
          // GET ALL EQUIPMENT DATA
@@ -271,15 +271,7 @@
          // ADD UE TO EQUIPMENT DATA
          result = await db.all('SELECT * FROM unique_equipment_data');
          result.forEach((row) => {
-            const item_id = (row.equipment_id).toString();
-            if (unique_equipment[item_id]) {
-                data[`${item_id}`] = {
-                    id: item_id,
-                    name: {
-                        JP: row.equipment_name
-                    },
-                };
-            }
+            (row.equipment_id).toString();
         });
 
          // GET CHARACTER MEMORY PIECES AVAILABLE FROM HARD AND VERY HARD QUESTS
