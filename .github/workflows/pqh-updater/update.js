@@ -961,15 +961,13 @@ function get_new_images(data) {
                         type = file_name.includes('equipment') || file_name.includes('item') ? 'items' : 'unit_icon',
                         decrypted_name = file_name.split('_')[1];
                     
-                    //Rename unit
-                    files[file_name] = {
-                        hash: file_data[1],
-                        encrypted: path.join(DIRECTORY.SETUP, 'encrypted', `${file_name}.unity3d`),
-                        // CONVERT unit_icon IMAGE NAME BACK TO 0star RARITY SO IT CAN BE ACCESSED MORE EASILY
-                        // REASON BEING IS THAT unit_id IS SAVED AS 0star RARITY ID
-                        decrypted: path.join(DIRECTORY.IMAGE_OUTPUT, type, `${type !== 'unit_icon'
+//                     files[file_name] = {
+//                         hash: file_data[1],
+//                         encrypted: path.join(DIRECTORY.SETUP, 'encrypted', `${file_name}.unity3d`),
+//                         // CONVERT unit_icon IMAGE NAME BACK TO 0star RARITY SO IT CAN BE ACCESSED MORE EASILY
+//                         // REASON BEING IS THAT unit_id IS SAVED AS 0star RARITY ID
+//                         decrypted: path.join(DIRECTORY.IMAGE_OUTPUT, type, `${type !== 'unit_icon'
 //                             ? decrypted_name : `${decrypted_name.substring(0, 4)}0${decrypted_name.substring(5)}`}.png`),
-                            ? decrypted_name : `${file_name}.png`),
                     };
                 });
 
