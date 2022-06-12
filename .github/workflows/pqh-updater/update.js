@@ -925,9 +925,10 @@ function get_new_images(data) {
             const unit_3_id = `${key.substring(0, 4)}3${key.substring(5)}`;
             const unit_6_id = `${key.substring(0, 4)}6${key.substring(5)}`;
 
+
             // CHECK IF IMAGE ALREADY EXISTS (UNIT ICON IMAGES ARE SAVED AS THEIR unit_0_id)
             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`))) {
-                queue.push([`unit_${unit_3_id}`,`unit_${unit_6_id}`]);
+                queue.push([`unit_${unit_3_id}`,`unit_6_id`]);
             }
         }
 
@@ -964,7 +965,7 @@ function get_new_images(data) {
                         // CONVERT unit_icon IMAGE NAME BACK TO 0star RARITY SO IT CAN BE ACCESSED MORE EASILY
                         // REASON BEING IS THAT unit_id IS SAVED AS 0star RARITY ID
                         decrypted: path.join(DIRECTORY.IMAGE_OUTPUT, type, `${type !== 'unit_icon'
-                            ? decrypted_name : `${decrypted_name.substring(0, 4)}0${decrypted_name.substring(5)}`}.png`),
+                            ? decrypted_name : `${decrypted_name.substring(0, 6)}`}.png`),
                     };
                 });
 
