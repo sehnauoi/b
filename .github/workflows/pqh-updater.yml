@@ -1,0 +1,85 @@
+# This workflow will auto download a database and push any changes if found
+
+name: pqh-updater
+
+on:
+  # run this task every minute 45 of every hr of every day
+  # preload usually happens at minute 45? but actions fires 5mins later
+  schedule:
+  - cron: '45 * * * *'
+
+  # allow this task to be run manually from Actions tab
+  workflow_dispatch:
+
+jobs:
+  # needs access to {{ secrets.DEPLOY_ACCESS_TOKEN }} with at least public_repo scope
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js [16.x]
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+          cache: 'npm'
+
+      - name: Setup Python [3.x]
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install Node.js Dependencies
+        run: npm install sqlite sqlite3 python-shell @actions/core@1.8.0
+
+      - name: Install Python dependencies
+        run: pip install lz4 Pillow decrunch
+
+      - name: Run update.js
+        id: update
+        run: node ./.github/workflows/pqh-updater/update.js
+
+      # assuming there are new changes
+      - name: Update images on Git
+        if: ${{ steps.update.outputs.success == 'true' }}
+        run: |
+          git config user.name $user_name
+          git config user.email $user_email
+          git add ./public/version
+          git add ./public/data.json
+          git add ./public/data.min.json
+          git add ./public/images
+          git diff-index --quiet HEAD || git commit -m "[Bot] Data Update" -m '
+          ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          This is an automated process. Issues may or may not have occured.'
+          git push
+        env:
+          user_name: 'Spugn'
+          user_email: 'spugn@users.noreply.github.com'
+          github_token: ${{ secrets.DEPLOY_ACCESS_TOKEN }}
+          repository: ${{ github.repository }}
+
+      - name: Build gh-pages
+        if: ${{ steps.update.outputs.success == 'true' }}
+        run: npm run build
+
+      - name: Deploy gh-pages to Git
+        if: ${{ steps.update.outputs.success == 'true' }}
+        run: |
+          git config --global user.name $user_name
+          git config --global user.email $user_email
+          git remote set-url origin https://${github_token}@github.com/${repository}
+          npm run deploy
+        env:
+          user_name: 'Spugn'
+          user_email: 'spugn@users.noreply.github.com'
+          github_token: ${{ secrets.DEPLOY_ACCESS_TOKEN }}
+          repository: ${{ github.repository }}
