@@ -896,7 +896,7 @@ function get_new_images(data) {
     return new Promise(async (resolve) => {
         let queue = [];
 
-        // CHECK EQUIPMENT
+//         // CHECK EQUIPMENT
 //         console.log("SEARCHING FOR MISSING ITEM IMAGES...");
 //         for (const key in data.equipment) {
 //             const equipment = data.equipment[key],
@@ -918,20 +918,17 @@ function get_new_images(data) {
 //             }
 //         }
 
-        // CHECK CHARACTERS
-        console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
-        for (const key in data.character) {
-            // GET THE 3star+ RARITY IMAGE
-            const unit_3_id = `${key.substring(0, 4)}3${key.substring(5)}`;
-            
-            // GET THE 6star+ RARITY IMAGE
-            const unit_6_id = `${key.substring(0, 4)}6${key.substring(5)}`;
+//         // CHECK CHARACTERS
+//         console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
+//         for (const key in data.character) {
+//             // GET THE 3star+ RARITY IMAGE
+//             const unit_3_id = `${key.substring(0, 4)}3${key.substring(5)}`;
 
-            // CHECK IF IMAGE ALREADY EXISTS (UNIT ICON IMAGES ARE SAVED AS THEIR unit_0_id)
-            if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`))) {
-                queue.push([`unit_${unit_3_id}`,`unit_${unit_6_id}`]);
-            }
-        }
+//             // CHECK IF IMAGE ALREADY EXISTS (UNIT ICON IMAGES ARE SAVED AS THEIR unit_0_id)
+//             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`))) {
+//                 queue.push(`unit_${unit_3_id}`);
+//             }
+//         }
 
         // EXTRACT IF THERE ARE NEW FILES
         if (queue.length <= 0) {
@@ -959,14 +956,15 @@ function get_new_images(data) {
                         line_end = manifest.indexOf('\n', index),
                         file_data = manifest.substring(index, line_end).split(','),
                         type = file_name.includes('equipment') || file_name.includes('item') ? 'items' : 'unit_icon',
-                        decrypted_name = file_name.split('_')[1];                    
+                        decrypted_name = file_name.split('_')[1];
                     files[file_name] = {
                         hash: file_data[1],
                         encrypted: path.join(DIRECTORY.SETUP, 'encrypted', `${file_name}.unity3d`),
                         // CONVERT unit_icon IMAGE NAME BACK TO 0star RARITY SO IT CAN BE ACCESSED MORE EASILY
                         // REASON BEING IS THAT unit_id IS SAVED AS 0star RARITY ID
                         decrypted: path.join(DIRECTORY.IMAGE_OUTPUT, type, `${type !== 'unit_icon'
-                            ? decrypted_name : `${decrypted_name}`}.png`),
+//                             ? decrypted_name : `${decrypted_name.substring(0, 4)}0${decrypted_name.substring(5)}`}.png`),
+                            ? decrypted_name : `${decrypted_name.substring(0, 5)}`}.png`),
                     };
                 });
 
