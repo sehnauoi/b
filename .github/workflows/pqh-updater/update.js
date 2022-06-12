@@ -964,7 +964,7 @@ function get_new_images(data) {
                         // CONVERT unit_icon IMAGE NAME BACK TO 0star RARITY SO IT CAN BE ACCESSED MORE EASILY
                         // REASON BEING IS THAT unit_id IS SAVED AS 0star RARITY ID
                         decrypted: path.join(DIRECTORY.IMAGE_OUTPUT, type, `${type !== 'unit_icon'
-                            ? decrypted_name : `${decrypted_name.substring(0, 5)}`}.png`),
+                            ? decrypted_name : `${decrypted_name}`}.png`),
                     };
                 });
 
