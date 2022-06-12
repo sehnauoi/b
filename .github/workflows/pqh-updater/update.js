@@ -933,7 +933,7 @@
          // CHECK CHARACTERS
          console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
          for (const key in data.character) {
-            const unit = data.unit[key],
+            const unit = data.character[key],
                 id = unit.id;
 
             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit', `${id}.png`)) && id !== "999999") {
