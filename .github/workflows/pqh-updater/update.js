@@ -948,7 +948,6 @@ function get_new_images(data) {
         // CHECK CHARACTERS
         console.log("SEARCHING FOR MISSING 6* CHARACTER IMAGES...");
         for (const key in data.character) {
-            // GET THE 3star+ RARITY IMAGE
             const character = data.character[key],
                 id = character.id;
                 
