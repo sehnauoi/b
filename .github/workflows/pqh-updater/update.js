@@ -958,8 +958,7 @@ function get_new_images(data) {
                     const index = manifest.indexOf(file_name),
                         line_end = manifest.indexOf('\n', index),
                         file_data = manifest.substring(index, line_end).split(','),
-                        type = file_name.includes('equipment') || file_name.includes('item') ? 'items' : 'unit_icon',
-                        file_name.split('_')[1];                    
+                        type = file_name.includes('equipment') || file_name.includes('item') ? 'items' : 'unit_icon';
 //                         decrypted_name = file_name.split('_')[1];                    
 //                     files[file_name] = {
 //                         hash: file_data[1],
