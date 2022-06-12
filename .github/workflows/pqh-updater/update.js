@@ -981,14 +981,14 @@ function get_new_images(data) {
                         line_end = manifest.indexOf('\n', index),
                         file_data = manifest.substring(index, line_end).split(','),
                         type = file_name.includes('equipment') || file_name.includes('item') ? 'items' : 'unit_icon',
-                        decrypted_name = file_name.split('_')[1];
+                        // decrypted_name = file_name.split('_')[1];
                     files[file_name] = {
                         hash: file_data[1],
                         encrypted: path.join(DIRECTORY.SETUP, 'encrypted', `${file_name}.unity3d`),
                         // CONVERT unit_icon IMAGE NAME BACK TO 0star RARITY SO IT CAN BE ACCESSED MORE EASILY
                         // REASON BEING IS THAT unit_id IS SAVED AS 0star RARITY ID
-                        decrypted: path.join(DIRECTORY.IMAGE_OUTPUT, type, `${type !== 'unit_icon'
-                            ? decrypted_name : `${decrypted_name.substring(0, 6)}`}.png`),
+                        // decrypted: path.join(DIRECTORY.IMAGE_OUTPUT, type, `${type !== 'unit_icon'
+                        //     ? decrypted_name : `${decrypted_name.substring(0, 6)}`}.png`),
                     };
                 });
 
@@ -996,7 +996,7 @@ function get_new_images(data) {
                 for (const file_name in files) {
                     await get_asset(files[file_name].encrypted, files[file_name].hash);
                     console.log(`DOWNLOADED ${file_name}.unity3d [${files[file_name].hash}] ; SAVED AS ${files[file_name].encrypted}`);
-                    deserialize(files[file_name].encrypted, files[file_name].decrypted);
+                    deserialize(files[file_name].encrypted/*, files[file_name].decrypted*/);
                 }
                 resolve(files);
             });
