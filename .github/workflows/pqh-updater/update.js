@@ -903,23 +903,20 @@ function get_new_images(data) {
                 id = equipment.id,
                 fragment_id = equipment.fragment.id;
 
-                queue.push(`item_${id}`);
-                queue.push(`equipment_${id}`);
-                queue.push(`equipment_${fragment_id}`);
             // CHECK IF IMAGE ALREADY EXISTS
-            // if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'items', `${id}.png`)) && id !== "999999") {
-            //     if (id.substring(0, 2) === "31" || id.substring(0, 2) === "32") {
-            //         // EQUIPMENT IS A MEMORY PIECE
-            //         queue.push(`item_${id}`);
-            //     }
-            //     else {
-            //         // REGULAR ITEM, BUSINESS AS USUAL
-            //         queue.push(`equipment_${id}`);
-            //     }
-            // }
-            // if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'items', `${fragment_id}.png`)) && fragment_id !== "999999") {
-            //     queue.push(`equipment_${fragment_id}`);
-            // }
+            if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'items', `${id}.png`)) && id !== "999999") {
+                if (id.substring(0, 2) === "31" || id.substring(0, 2) === "32") {
+                    // EQUIPMENT IS A MEMORY PIECE
+                    queue.push(`item_${id}`);
+                }
+                else {
+                    // REGULAR ITEM, BUSINESS AS USUAL
+                    queue.push(`equipment_${id}`);
+                }
+            }
+            if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'items', `${fragment_id}.png`)) && fragment_id !== "999999") {
+                queue.push(`equipment_${fragment_id}`);
+            }
         }
 
         // // CHECK CHARACTERS
