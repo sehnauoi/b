@@ -919,16 +919,26 @@ function get_new_images(data) {
         }
 
         // CHECK CHARACTERS
-        console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
+        console.log("SEARCHING FOR MISSING 3* CHARACTER IMAGES...");
         for (const key in data.character) {
             // GET THE 3star+ RARITY IMAGE
             const unit_3_id = `${key.substring(0, 4)}3${key.substring(5)}`;
-            const unit_6_id = `${key.substring(0, 4)}6${key.substring(5)}`;
-
 
             // CHECK IF IMAGE ALREADY EXISTS (UNIT ICON IMAGES ARE SAVED AS THEIR unit_0_id)
             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`))) {
-                queue.push([`unit_${unit_3_id}`,`unit_${unit_6_id}`]);
+                queue.push(`unit_${unit_3_id}`);
+            }
+        }
+        
+        // CHECK CHARACTERS
+        console.log("SEARCHING FOR MISSING 6* CHARACTER IMAGES...");
+        for (const key in data.character) {
+            // GET THE 3star+ RARITY IMAGE
+            const unit_6_id = `${key.substring(0, 4)}6${key.substring(5)}`;
+
+            // CHECK IF IMAGE ALREADY EXISTS (UNIT ICON IMAGES ARE SAVED AS THEIR unit_0_id)
+            if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`))) {
+                queue.push(`unit_${unit_6_id}`);
             }
         }
 
