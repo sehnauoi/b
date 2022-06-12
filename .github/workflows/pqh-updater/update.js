@@ -927,7 +927,7 @@ function get_new_images(data) {
 
             // CHECK IF IMAGE ALREADY EXISTS (UNIT ICON IMAGES ARE SAVED AS THEIR unit_0_id)
             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`))) {
-                queue.push(`[unit_${unit_3_id},unit_${unit_6_id}]`);
+                queue.push([`unit_${unit_3_id},unit_${unit_6_id}`]);
             }
         }
 
