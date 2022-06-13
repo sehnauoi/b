@@ -1015,7 +1015,7 @@
          for (const key in data.unit) {            
              // CHECK IF IMAGE ALREADY EXISTS
              if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'cards', `${key}.png`)) && key !== `${key.substring(0, 4)}0${key.substring(5)}`) {
-                 queue.push(`unit_${key}`);
+                 queue.push(`bg_still_unit_${key}`);
              }
          }
 
