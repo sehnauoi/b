@@ -291,35 +291,35 @@
              }
          });
  
-         // ADD MEMORY PIECES TO EQUIPMENT DATA
-         result = await db.all('SELECT * FROM item_data');
-         result.forEach((row) => {
-             if (row.item_type === 11        // MEMORY PIECE
-                 || row.item_type === 18) {  // PURE MEMORY PIECE
+        //  // ADD MEMORY PIECES TO EQUIPMENT DATA
+        //  result = await db.all('SELECT * FROM item_data');
+        //  result.forEach((row) => {
+        //      if (row.item_type === 11        // MEMORY PIECE
+        //          || row.item_type === 18) {  // PURE MEMORY PIECE
  
-                 const item_id = (row.item_id).toString();
-                 if (memory_pieces[item_id]) {
-                     data[`${item_id}`] = {
-                         id: item_id,
-                         name: {
-                             JP: row.item_name
-                         },
-                         rarity: "99",
-                         fragment: {
-                             id: "999999",
-                             name: {},
-                         },
-                         recipes: {
-                             JP: {
-                                 required_pieces: 1,
-                                 required_items: [],
-                                 recipe_note: "JP"
-                             }
-                         },
-                     };
-                 }
-             }
-         });
+        //          const item_id = (row.item_id).toString();
+        //          if (memory_pieces[item_id]) {
+        //              data[`${item_id}`] = {
+        //                  id: item_id,
+        //                  name: {
+        //                      JP: row.item_name
+        //                  },
+        //                  rarity: "99",
+        //                  fragment: {
+        //                      id: "999999",
+        //                      name: {},
+        //                  },
+        //                  recipes: {
+        //                      JP: {
+        //                          required_pieces: 1,
+        //                          required_items: [],
+        //                          recipe_note: "JP"
+        //                      }
+        //                  },
+        //              };
+        //          }
+        //      }
+        //  });
  
          // ADD JAPANESE RECIPE
          result = await db.all('SELECT * FROM equipment_craft');
