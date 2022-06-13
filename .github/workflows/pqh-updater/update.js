@@ -1061,7 +1061,7 @@
                          : file_name.includes('skill')
                          ? 'skill' // icon_icon_skill
                          : 'unit_icon' // unit
-                         decrypted_name = file_name.split('_')[1];
+                         decrypted_name = file_name.split('_')[3];
                      files[file_name] = {
                          hash: file_data[1],
                          encrypted: path.join(DIRECTORY.SETUP, 'encrypted', `${file_name}.unity3d`),
