@@ -989,8 +989,8 @@
          for (const key in data.unit) {
                         
              // CHECK IF IMAGE ALREADY EXISTS
-             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`)) && key.substring(5) !== "0") {
-                queue.push(`unit_${key}`);
+             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`))) {
+                queue.push(`unit_${key}`).except(`unit_${key.substring(0, 4)}0${key.substring(5)}`);
             }
          }
 
