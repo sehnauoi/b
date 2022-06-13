@@ -267,7 +267,7 @@
          result.forEach((row) => {
              const equipment_id = (row.equipment_id).toString();
              if (equipment_id === DICTIONARY.EQUIPMENT.FULL) {
-                data[equipment_id].name[region] = row.equipment_id;
+                data[`${DICTIONARY.EQUIPMENT.FULL}${equipment_id}`].fragment.id = equipment_id;
             }
          });
  
