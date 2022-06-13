@@ -267,15 +267,6 @@
          result.forEach((row) => {
              if (row.equipment_id > 130000) {  // UE 
                  (row.equipment_id).toString();
-                 if (UE[equipment_id]) {
-                     data[`${equipment_id}`] = {
-                         id: equipment_id,
-                         name: {
-                             JP: row.equipment_name,
-                             Descrption: row.descrption                             
-                         },
-                     };
-                 }
              }
          });
  
