@@ -989,7 +989,7 @@
              // CHECK IF IMAGE ALREADY EXISTS
              if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`))) {
                 // queue.push(`unit_${key}`);
-                queue.pop(`unit_${unit_0}`);
+                queue.pop(`unit_${unit_0}`),
                 queue.push(`unit_${unit_1}`);             
             }
          }
