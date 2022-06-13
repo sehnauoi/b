@@ -237,6 +237,10 @@
                         JP: row.equipment_name,
                         Description: row.description
                     },
+                    fragment: {
+                        id: "999999",
+                        name: {},
+                    }
                 };
             }
          });
