@@ -265,10 +265,18 @@
          // ADD UE TO EQUIPMENT DATA
          result = await db.all('SELECT * FROM unique_equipment_data');
          result.forEach((row) => {
-             const equipment_id = (row.equipment_id).toString();
-             if (equipment_id === DICTIONARY.EQUIPMENT.FULL) {
-                data[`${DICTIONARY.EQUIPMENT.FULL}${equipment_id}`].fragment.id = equipment_id;
-            }
+             if (row.equipment_id > 130000) {  // UE 
+                 const equipment_id = (row.equipment_id).toString();
+                 if (memory_pieces[equipment_id]) {
+                     data[`${equipment_id}`] = {
+                         id: equipment_id,
+                         name: {
+                             JP: row.equipment_name,
+                             Descrption: row.descrption                             
+                         },
+                     };
+                 }
+             }
          });
  
          // GET CHARACTER MEMORY PIECES AVAILABLE FROM HARD AND VERY HARD QUESTS
