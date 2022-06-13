@@ -964,7 +964,7 @@
              }
          }
  
-         // CHECK CHARACTERS ICON 1 & 3 & 6 star
+         // CHECK CHARACTERS ICON 3 & 6 star
          console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
          for (const key in data.unit) {
                         
@@ -982,20 +982,16 @@
                         
              // CHECK IF IMAGE ALREADY EXISTS
              if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`))) {
-                queue.push(`unit_${unit_1}`);             
+                queue.push(`unit_${unit_1}`);
             }
          }
 
          // CHECK CHARACTERS CARDS
          console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
-         for (const key in data.unit) {
-            // GET THE 1/3/6 star RARITY IMAGE
-            const unit_0 = `${key.substring(0, 4)}0${key.substring(5)}`;
-            
+         for (const key in data.unit) {            
              // CHECK IF IMAGE ALREADY EXISTS
              if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'cards', `${key}.png`))) {
                  queue.push(`bg_still_unit${key}`);
-                 queue.pop(`bg_still_unit${unit_0}`);
              }
          }
  
