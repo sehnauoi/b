@@ -57,6 +57,7 @@ jobs:
           git add ./public/data.json
           git add ./public/data.min.json
           git add ./public/images
+          git add /database
           git diff-index --quiet HEAD || git commit -m "[Bot] Data Update" -m '
           ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           This is an automated process. Issues may or may not have occured.'

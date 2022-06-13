@@ -1022,7 +1022,7 @@
                          file_data = manifest.substring(index, line_end).split(','),
                          type = file_name.includes('equipment') || file_name.includes('item')
                          ? 'items' // equipment || item
-                         : file_name.includes('bg_still_unit')
+                         : file_name.includes('bg_still_unit_')
                          ? 'cards' // bg_still_unit
                          : 'unit_icon' // unit
                          decrypted_name = file_name.split('_')[1];
