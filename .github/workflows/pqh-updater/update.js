@@ -62,11 +62,17 @@
      };
      const equipment_data = await write_equipment();
      data.equipment = equipment_data;
+
      const character_data = await write_character();
      data.character = character_data;
+
+     const unit_data = await get_unit_data();
+     data.unit = unit_data;
+
      let quest_data = await write_quest();
      quest_data = await write_event_quest(quest_data);
      data.quest = quest_data;
+
      await get_new_images(data);
  
      console.log("UPDATE COMPLETE!");
@@ -202,6 +208,35 @@
      }
  }
  
+ function get_unit_data() {
+    return new Promise(async function(resolve) {
+        let result, data = {};
+        let db = await open({
+            filename: path.join(DIRECTORY.DATABASE, 'master_jp.db'),
+            driver: sqlite3.Database
+        });
+
+        // GET ALL unit DATA
+        result = await db.all('SELECT * FROM unit_data');
+        result.forEach((row) => {
+            const unit_id = (row.unit_id).toString();     // 101011
+            if (item_type === DICTIONARY.EQUIPMENT.FULL) {
+                data[unit_id] = {
+                    id: unit_id,
+                    name: {
+                        name: row.unit_name,
+                        kana: row.kana,
+                    },
+                };
+            }
+        });
+         // FINISH
+         db.close().finally(() => {
+             resolve(data);
+         });
+ })
+ }
+
  function write_equipment() {
      /**
       * DATABASE NOTES
@@ -939,13 +974,11 @@
  
          // CHECK CHARACTERS
          console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
-         for (const key in data.character) {
-             // GET THE 3star+ RARITY IMAGE
-             const unit_3_id = `${key.substring(0, 6)}`;
- 
-             // CHECK IF IMAGE ALREADY EXISTS (UNIT ICON IMAGES ARE SAVED AS THEIR unit_0_id)
+         for (const key in data.unit) {
+            
+             // CHECK IF IMAGE ALREADY EXISTS
              if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`))) {
-                 queue.push(`unit_${unit_3_id}`);
+                 queue.push(`unit_${key}`);
              }
          }
  
