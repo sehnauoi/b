@@ -990,7 +990,7 @@
                         
              // CHECK IF IMAGE ALREADY EXISTS
              if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`))) {
-                queue.push(`unit_${key}`).except(`unit_${key.substring(0, 4)}0${key.substring(5)}`);
+                queue.push(`unit_${key}`);
             }
          }
 
@@ -1043,7 +1043,11 @@
                      const index = manifest.indexOf(file_name),
                          line_end = manifest.indexOf('\n', index),
                          file_data = manifest.substring(index, line_end).split(','),
-                         type = file_name.includes('equipment') || file_name.includes('item') ? 'items' : 'unit_icon',
+                         type = file_name.includes('equipment') || file_name.includes('item')
+                         ? 'items' // equipment || item
+                         : file_name.includes('bg_still_unit')
+                         ? 'cards' // bg_still_unit
+                         : 'unit_icon', // unit
                          decrypted_name = file_name.split('_')[1];
                      files[file_name] = {
                          hash: file_data[1],
