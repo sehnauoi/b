@@ -69,8 +69,8 @@
      const unit_data = await get_unit_data();
      data.unit = unit_data;
 
-     const skill_data = await get_skill_data();
-     data.skill = skill_data;
+    //  const skill_data = await get_skill_data();
+    //  data.skill = skill_data;
 
     //  const unit_data = await get_unit_data();
     //  data.unit = unit_data;
