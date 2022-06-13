@@ -69,12 +69,6 @@
      const unit_data = await get_unit_data();
      data.unit = unit_data;
 
-    //  const skill_data = await get_skill_data();
-    //  data.skill = skill_data;
-
-    //  const unit_data = await get_unit_data();
-    //  data.unit = unit_data;
-
      let quest_data = await write_quest();
      quest_data = await write_event_quest(quest_data);
      data.quest = quest_data;
@@ -955,7 +949,7 @@
                  id = equipment.id,
                  fragment_id = equipment.fragment.id;
              // CHECK IF IMAGE ALREADY EXISTS
-             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'items', `${id}.png`))) {
+             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'items', `${id}.png`)) && id !== "999999") {
                  if (id.substring(0, 2) === "31" || id.substring(0, 2) === "32") {
                      // EQUIPMENT IS A MEMORY PIECE
                      queue.push(`item_${id}`);
@@ -970,54 +964,42 @@
              }
          }
  
-        //  // CHECK CHARACTERS ICON 3 & 6 star
-        //  console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
-        //  for (const key in data.unit) {
-                        
-        //      // CHECK IF IMAGE ALREADY EXISTS
-        //      if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'items', `${fragment_id}.png`)) && fragment_id !== "999999") {
-        //         queue.push(`equipment_${fragment_id}`);
-        //     }
-        //      if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`)) && id.substring(5) !== "0") {
-        //         queue.push(`unit_${key}`),
-        //         filter(id.substring(5) !== "0");
-        //     }
-        //  }
-
-         // CHECK CHARACTERS ICON 3 & 6 star
+         // CHECK CHARACTERS ICON 1 & 3 & 6 star
          console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
          for (const key in data.unit) {
             const unit_0 = `${key.substring(0, 4)}0${key.substring(5)}`;
                         
              // CHECK IF IMAGE ALREADY EXISTS
              if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`))) {
-                queue.push(`unit_${key}`); 
-            } queue.pop(`unit_${unit_0}`);  
+                queue.push(`unit_${key}`);
+                queue.pop(`unit_${unit_0}`);
+            }
          }
 
         //  // CHECK CHARACTERS ICON 1 star
         //  console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
         //  for (const key in data.character) {
+        //     // GET THE 1/3/6 star RARITY IMAGE
         //     const unit_1 = `${key.substring(0, 4)}1${key.substring(5)}`;
                         
         //      // CHECK IF IMAGE ALREADY EXISTS
         //      if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`))) {
-        //         queue.push(`unit_${unit_1}`);
+        //         queue.push(`unit_${unit_1}`);             
         //     }
         //  }
 
-        //  // CHECK CHARACTERS CARDS
-        //  console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
-        //  for (const key in data.unit) {
-        //     // GET THE 0 data
-        //     const unit_0 = `${key.substring(0, 4)}0${key.substring(5)}`;
+         // CHECK CHARACTERS CARDS
+         console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
+         for (const key in data.unit) {
+            // GET THE 1/3/6 star RARITY IMAGE
+            const unit_0 = `${key.substring(0, 4)}0${key.substring(5)}`;
             
-        //      // CHECK IF IMAGE ALREADY EXISTS
-        //      if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'cards', `${key}.png`)) && key.substring(5) !== "0") {
-        //          queue.push(`bg_still_unit_${key}`),
-        //          queue.pop(`bg_still_unit_${unit_0}`);
-        //      }
-        //  }
+             // CHECK IF IMAGE ALREADY EXISTS
+             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'cards', `${key}.png`))) {
+                 queue.push(`bg_still_unit${key}`);
+                 queue.pop(`bg_still_unit${unit_0}`);
+             }
+         }
  
          // EXTRACT IF THERE ARE NEW FILES
          if (queue.length <= 0) {
@@ -1048,7 +1030,7 @@
                          ? 'items' // equipment || item
                          : file_name.includes('bg_still_unit')
                          ? 'cards' // bg_still_unit
-                         : 'unit_icon', // unit
+                         : 'unit_icon' // unit
                          decrypted_name = file_name.split('_')[1];
                      files[file_name] = {
                          hash: file_data[1],
