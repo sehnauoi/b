@@ -215,17 +215,13 @@
             filename: path.join(DIRECTORY.DATABASE, 'master_jp.db'),
             driver: sqlite3.Database
         });
-
-        result = await db.all('SELECT * FROM unit_data WHERE unit_id < 190000');
+        result = await db.all('SELECT * FROM unit_comments');
         result.forEach((row) => {
             data[`${row.unit_id}`] = {
                 id: `${row.unit_id}`,
-                name: {
-                    JP: row.unit_name,
-                    kana: row.kana,
-                },
             };
         });
+            
          // FINISH
          db.close().finally(() => {
              resolve(data);
@@ -968,13 +964,30 @@
              }
          }
  
-         // CHECK CHARACTERS
+         // CHECK CHARACTERS ICON
          console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
          for (const key in data.unit) {
-            
+            // GET THE 1/3/6 star RARITY IMAGE
+            const unit_0 = `${key.substring(0, 4)}0${key.substring(5)}`;
+            const unit_1 = `${key.substring(0, 4)}1${key.substring(5)}`;
+                        
              // CHECK IF IMAGE ALREADY EXISTS
              if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`))) {
-                 queue.push(`unit_${key}`);
+                queue.push(`unit_${key}`);
+                queue.pop(`unit_${unit_0}`);
+                queue.push(`unit_${unit_1}`);             }
+         }
+
+         // CHECK CHARACTERS CARDS
+         console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
+         for (const key in data.unit) {
+            // GET THE 1/3/6 star RARITY IMAGE
+            const unit_0 = `${key.substring(0, 4)}0${key.substring(5)}`;
+            
+             // CHECK IF IMAGE ALREADY EXISTS
+             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'cards', `${key}.png`))) {
+                 queue.push(`still_unit_${key}`);
+                 queue.pop(`still_unit_${unit_0}`);
              }
          }
  
@@ -1003,7 +1016,7 @@
                      const index = manifest.indexOf(file_name),
                          line_end = manifest.indexOf('\n', index),
                          file_data = manifest.substring(index, line_end).split(','),
-                         type = file_name.includes('equipment') || file_name.includes('item') ? 'items' : 'unit_icon',
+                         type = file_name.includes('equipment') || file_name.includes('item') || file_name.includes('bg_') ? 'items' : 'unit_icon',
                          decrypted_name = file_name.split('_')[1];
                      files[file_name] = {
                          hash: file_data[1],
