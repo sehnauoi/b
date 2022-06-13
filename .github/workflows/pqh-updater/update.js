@@ -1056,10 +1056,10 @@
                          file_data = manifest.substring(index, line_end).split(','),
                          type = file_name.includes('equipment') || file_name.includes('item')
                          ? 'items' // equipment || item
-                         : file_name.includes('bg_still_unit')
+                         : file_name.includes('still')
                          ? 'cards' // bg_still_unit
-                         : file_name.includes('icon_icon_skill')
-                         ? 'skill' // icon_icon_skill_
+                         : file_name.includes('skill')
+                         ? 'skill' // icon_icon_skill
                          : 'unit_icon' // unit
                          decrypted_name = file_name.split('_')[1];
                      files[file_name] = {
