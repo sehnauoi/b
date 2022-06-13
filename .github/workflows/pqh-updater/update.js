@@ -263,22 +263,8 @@
          });
 
          // ADD UE TO EQUIPMENT DATA
-         let unique_equipment = {};
          result = await db.all('SELECT * FROM unique_equipment_data');
-         result.forEach((row) => {
-             if (row.equipment_id > 130000) {  // UE 
-                 const equipment_id = (row.equipment_id).toString();
-                 if (unique_equipment[equipment_id]) {
-                     data[`${equipment_id}`] = {
-                         id: equipment_id,
-                         name: {
-                             JP: row.equipment_name,
-                             Descrption: row.descrption                             
-                         },
-                     };
-                 }
-             }
-         });
+
  
          // GET CHARACTER MEMORY PIECES AVAILABLE FROM HARD AND VERY HARD QUESTS
          let memory_pieces = {};
