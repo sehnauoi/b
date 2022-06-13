@@ -264,8 +264,8 @@
 
          // ADD UE TO EQUIPMENT DATA
          result = await db.all('SELECT * FROM unique_equipment_data');
+         result.forEach(row);
 
- 
          // GET CHARACTER MEMORY PIECES AVAILABLE FROM HARD AND VERY HARD QUESTS
          let memory_pieces = {};
          result = await db.all('SELECT * FROM quest_data');
