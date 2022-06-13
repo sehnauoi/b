@@ -968,13 +968,13 @@
          console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
          for (const key in data.unit) {
             // GET THE 1/3/6 star RARITY IMAGE
-            // const unit_0 = `${key.substring(0, 4)}0${key.substring(5)}`;
+            const unit_0 = `${key.substring(0, 4)}0${key.substring(5)}`;
             // const unit_1 = `${key.substring(0, 4)}1${key.substring(5)}`;
                         
              // CHECK IF IMAGE ALREADY EXISTS
              if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`))) {
-                queue.push(`unit_${key}`);
-                // queue.pop(`unit_${unit_0}`);
+                queue.push(`unit_${key}`),
+                queue.pop(`unit_${unit_0}`);
                 // queue.push(`unit_${unit_1}`);             
             }
          }
@@ -989,7 +989,7 @@
              // CHECK IF IMAGE ALREADY EXISTS
              if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`))) {
                 // queue.push(`unit_${key}`);
-                queue.pop(`unit_${unit_0}`),
+                // queue.pop(`unit_${unit_0}`),
                 queue.push(`unit_${unit_1}`);             
             }
          }
