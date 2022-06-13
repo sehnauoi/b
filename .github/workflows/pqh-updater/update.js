@@ -973,7 +973,7 @@
                  id = equipment.id,
                  fragment_id = equipment.fragment.id;
              // CHECK IF IMAGE ALREADY EXISTS
-             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'items', `${id}.png`)) && id !== "999999") {
+             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'items', `${id}.png`))) {
                  if (id.substring(0, 2) === "31" || id.substring(0, 2) === "32") {
                      // EQUIPMENT IS A MEMORY PIECE
                      queue.push(`item_${id}`);
@@ -993,7 +993,7 @@
          for (const key in data.unit) {
                         
              // CHECK IF IMAGE ALREADY EXISTS
-             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`))) {
+             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`)) && key !== `${key.substring(0, 4)}0${key.substring(5)}`) {
                 queue.push(`unit_${key}`);
             }
          }
