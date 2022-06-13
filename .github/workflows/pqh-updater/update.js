@@ -274,7 +274,7 @@
                         Description: row.description
                     },
                 };
-            }63
+            }
          });
  
          // GET CHARACTER MEMORY PIECES AVAILABLE FROM HARD AND VERY HARD QUESTS
