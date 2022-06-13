@@ -981,7 +981,7 @@
 
          // CHECK CHARACTERS ICON 1 star
          console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
-         for (const key in data.unit) {
+         for (const key in data.character) {
             // GET THE 1/3/6 star RARITY IMAGE
             // const unit_0 = `${key.substring(0, 4)}0${key.substring(5)}`;
             const unit_1 = `${key.substring(0, 4)}1${key.substring(5)}`;
