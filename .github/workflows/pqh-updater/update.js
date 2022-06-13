@@ -1058,7 +1058,7 @@
                          ? 'items' // equipment || item
                          : file_name.includes('bg_still_unit')
                          ? 'cards' // bg_still_unit
-                         : file_name.includes('icon_icon_skill')
+                         : file_name.includes('skill')
                          ? 'skill' // icon_icon_skill
                          : 'unit_icon' // unit
                          decrypted_name = file_name.split('_')[1];
