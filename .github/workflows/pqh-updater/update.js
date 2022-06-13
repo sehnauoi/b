@@ -216,19 +216,15 @@
             driver: sqlite3.Database
         });
 
-        // GET ALL unit DATA
-        result = await db.all('SELECT * FROM unit_data');
+        result = await db.all('SELECT * FROM unit_data WHERE unit_id < 190000');
         result.forEach((row) => {
-            const unit_id = (row.unit_id).toString();     // 101011
-            if (item_type === DICTIONARY.EQUIPMENT.FULL) {
-                data[unit_id] = {
-                    id: unit_id,
-                    name: {
-                        name: row.unit_name,
-                        kana: row.kana,
-                    },
-                };
-            }
+            data[`${row.unit_id}`] = {
+                id: `${row.unit_id}`,
+                name: {
+                    JP: row.unit_name,
+                    kana: row.kana,
+                },
+            };
         });
          // FINISH
          db.close().finally(() => {
