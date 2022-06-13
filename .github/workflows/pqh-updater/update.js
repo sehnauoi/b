@@ -964,7 +964,7 @@
              }
          }
  
-         // CHECK CHARACTERS ICON
+         // CHECK CHARACTERS ICON 3 & 6 star
          console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
          for (const key in data.unit) {
             // GET THE 1/3/6 star RARITY IMAGE
@@ -978,7 +978,7 @@
                 // queue.push(`unit_${unit_1}`);             
             }
          }
-         // CHECK CHARACTERS ICON
+         // CHECK CHARACTERS ICON 1 star
          console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
          for (const key in data.character) {
             // GET THE 1/3/6 star RARITY IMAGE
