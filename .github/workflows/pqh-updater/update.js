@@ -1007,18 +1007,18 @@
         //     }
         //  }
 
-         // CHECK CHARACTERS CARDS
-         console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
-         for (const key in data.unit) {
-            // GET THE 0 data
-            const unit_0 = `${key.substring(0, 4)}0${key.substring(5)}`;
+        //  // CHECK CHARACTERS CARDS
+        //  console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
+        //  for (const key in data.unit) {
+        //     // GET THE 0 data
+        //     const unit_0 = `${key.substring(0, 4)}0${key.substring(5)}`;
             
-             // CHECK IF IMAGE ALREADY EXISTS
-             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'cards', `${key}.png`)) && key.substring(5) !== "0") {
-                 queue.push(`bg_still_unit_${key}`),
-                 queue.pop(`bg_still_unit_${unit_0}`);
-             }
-         }
+        //      // CHECK IF IMAGE ALREADY EXISTS
+        //      if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'cards', `${key}.png`)) && key.substring(5) !== "0") {
+        //          queue.push(`bg_still_unit_${key}`),
+        //          queue.pop(`bg_still_unit_${unit_0}`);
+        //      }
+        //  }
  
          // EXTRACT IF THERE ARE NEW FILES
          if (queue.length <= 0) {
