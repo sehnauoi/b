@@ -1005,7 +1005,7 @@
             const unit_1 = `${key.substring(0, 4)}1${key.substring(5)}`;
                         
              // CHECK IF IMAGE ALREADY EXISTS
-             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`))) {
+             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key.substring(0, 4)}1${key.substring(5)}.png`))) {
                 queue.push(`unit_${unit_1}`);
             }
          }
