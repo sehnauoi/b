@@ -239,7 +239,7 @@
             filename: path.join(DIRECTORY.DATABASE, 'master_jp.db'),
             driver: sqlite3.Database
         });
-        result = await db.all('SELECT * FROM icon_type');
+        result = await db.all('SELECT * FROM skill_data');
         result.forEach((row) => {
             data[`${row.unit_id}`] = {
                 id: `${row.unit_id}`,
