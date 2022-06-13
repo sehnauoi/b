@@ -989,7 +989,7 @@
          for (const key in data.unit) {
                         
              // CHECK IF IMAGE ALREADY EXISTS
-             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`)) && id.substring(5) !== "0") {
+             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`)) && key.substring(5) !== "0") {
                 queue.push(`unit_${key}`);
             }
          }
@@ -1012,7 +1012,7 @@
             const unit_0 = `${key.substring(0, 4)}0${key.substring(5)}`;
             
              // CHECK IF IMAGE ALREADY EXISTS
-             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'cards', `${key}.png`))) {
+             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'cards', `${key}.png`)) && key.substring(5) !== "0") {
                  queue.push(`bg_still_unit_${key}`),
                  queue.pop(`bg_still_unit_${unit_0}`);
              }
