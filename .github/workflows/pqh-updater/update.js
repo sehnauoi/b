@@ -977,6 +977,9 @@
                 // queue.pop(`unit_${unit_0}`);
                 // queue.push(`unit_${unit_1}`);             
             }
+            
+            queue.pop(`unit_${unit_0}`),
+            queue.push(`unit_${unit_1}`);
          }
 
         //  // CHECK CHARACTERS ICON 1 star
