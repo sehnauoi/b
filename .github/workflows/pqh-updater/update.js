@@ -225,6 +225,21 @@
              filename: path.join(DIRECTORY.DATABASE, 'master_jp.db'),
              driver: sqlite3.Database
          });
+
+         // ADD UE TO EQUIPMENT DATA
+         result = await db.all('SELECT * FROM unique_equipment_data');
+         result.forEach((row) => {
+             const equipment_id = (row.equipment_id).toString()
+             if (row.equipment_id > 130000) {
+                data[equipment_id] = {
+                    id: equipment_id,
+                    name: {
+                        JP: row.equipment_name,
+                        Description: row.description
+                    },
+                };
+            }
+         });
  
          // GET ALL EQUIPMENT DATA
          result = await db.all('SELECT * FROM equipment_data');
@@ -260,21 +275,6 @@
                      data[`${DICTIONARY.EQUIPMENT.FULL}${item_id}`].fragment.name["JP"] = row.equipment_name;
                  }
              }
-         });
-
-         // ADD UE TO EQUIPMENT DATA
-         result = await db.all('SELECT * FROM unique_equipment_data');
-         result.forEach((row) => {
-             const equipment_id = (row.equipment_id).toString()
-             if (row.equipment_id > 130000) {
-                data[equipment_id] = {
-                    id: equipment_id,
-                    name: {
-                        JP: row.equipment_name,
-                        Description: row.description
-                    },
-                };
-            }
          });
  
          // GET CHARACTER MEMORY PIECES AVAILABLE FROM HARD AND VERY HARD QUESTS
@@ -505,7 +505,7 @@
  
          // PURGE UNITS WITH NO EQUIPMENT
          // UNITS LIKE ONES NOT IMPLEMENTED (split units from duo/trio) CAN EXIST
-        //  purge_no_equips();
+         purge_no_equips();
  
          // REGION LIMITED CHARACTERS?
          console.log("SEARCHING FOR REGION LIMITED CHARACTERS...");
@@ -554,20 +554,20 @@
              });
          }
  
-        //  purge_no_equips();
+         purge_no_equips();
  
          // FINISH
          db.close().finally(() => {
              resolve(data);
          });
  
-        //  function purge_no_equips() {
-        //      for (const key in data) {
-        //          if (Object.keys(data[key].equipment).length === 0) {
-        //              delete data[key];
-        //          }
-        //      }
-        //  }
+         function purge_no_equips() {
+             for (const key in data) {
+                 if (Object.keys(data[key].equipment).length === 0) {
+                     delete data[key];
+                 }
+             }
+         }
      });
  }
  
@@ -937,11 +937,11 @@
          console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
          for (const key in data.character) {
              // GET THE 3star+ RARITY IMAGE
-            //  const unit_3_id = `${key.substring(0, 4)}3${key.substring(5)}`;
+             const unit_3_id = `${key.substring(0, 6)}`;
  
              // CHECK IF IMAGE ALREADY EXISTS (UNIT ICON IMAGES ARE SAVED AS THEIR unit_0_id)
              if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`))) {
-                 queue.push(`unit_${key.substring(0, 6)}`);
+                 queue.push(`unit_${unit_3_id}`);
              }
          }
  
