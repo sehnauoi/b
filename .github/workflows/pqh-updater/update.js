@@ -976,17 +976,17 @@
                 queue.pop(`unit_${unit_0}`);
             }
          }
-         // CHECK 1 STAR CHARACTERS ICON
-         console.log("SEARCHING FOR MISSING 1 STAR CHARACTER IMAGES...");
-         for (const key in data.unit) {
-            // GET THE 1/3/6 star RARITY IMAGE
-            const unit_1 = `${key.substring(0, 4)}1${key.substring(5)}`;
+        //  // CHECK 1 STAR CHARACTERS ICON
+        //  console.log("SEARCHING FOR MISSING 1 STAR CHARACTER IMAGES...");
+        //  for (const key in data.unit) {
+        //     // GET THE 1/3/6 star RARITY IMAGE
+        //     const unit_1 = `${key.substring(0, 4)}1${key.substring(5)}`;
                         
-             // CHECK IF IMAGE ALREADY EXISTS
-             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`))) {
-                queue.push(`unit_${unit_1}`);             
-            }
-         }
+        //      // CHECK IF IMAGE ALREADY EXISTS
+        //      if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`))) {
+        //         queue.push(`unit_${unit_1}`);             
+        //     }
+        //  }
 
         //  // CHECK CHARACTERS CARDS
         //  console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
