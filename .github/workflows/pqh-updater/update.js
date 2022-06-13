@@ -315,16 +315,13 @@
              }
          });
 
-         // ADD ALL UE TO EQUIPMENT DATA
+         // ADD UE TO EQUIPMENT DATA
          result = await db.all('SELECT * FROM unique_equipment_data');
          result.forEach((row) => {
-             data[`${row.equipment_id}`] = {
-                 id: `${row.equipment_id}`,
-                 name: {
-                     JP: row.equipment_id
-                 },
-                 equipment: {},
-             };
+             const equipment_id = (row.equipment_id).toString();
+             if (equipment_id === DICTIONARY.EQUIPMENT.FULL) {
+                data[equipment_id].name[region] = row.equipment_name;
+            }
          });
  
          // ADD JAPANESE RECIPE
