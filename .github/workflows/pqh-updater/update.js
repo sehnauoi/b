@@ -69,6 +69,9 @@
      const unit_data = await get_unit_data();
      data.unit = unit_data;
 
+     const skill_data = await get_skill_data();
+     data.skill = skill_data;
+
      let quest_data = await write_quest();
      quest_data = await write_event_quest(quest_data);
      data.quest = quest_data;
@@ -216,6 +219,27 @@
             driver: sqlite3.Database
         });
         result = await db.all('SELECT * FROM unit_comments');
+        result.forEach((row) => {
+            data[`${row.unit_id}`] = {
+                id: `${row.unit_id}`,
+            };
+        });
+            
+         // FINISH
+         db.close().finally(() => {
+             resolve(data);
+         });
+ })
+ } 
+ 
+ function get_skill_data() {
+    return new Promise(async function(resolve) {
+        let result, data = {};
+        let db = await open({
+            filename: path.join(DIRECTORY.DATABASE, 'master_jp.db'),
+            driver: sqlite3.Database
+        });
+        result = await db.all('SELECT * FROM icon_type');
         result.forEach((row) => {
             data[`${row.unit_id}`] = {
                 id: `${row.unit_id}`,
@@ -994,6 +1018,16 @@
                  queue.push(`bg_still_unit_${key}`);
              }
          }
+
+         // CHECK SKILLS ICON
+         console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
+         for (const key in data.skill) {
+                        
+             // CHECK IF IMAGE ALREADY EXISTS
+             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'skill', `${key}.png`))) {
+                queue.push(`icon_icon_skill_${key}`);
+            }
+         }
  
          // EXTRACT IF THERE ARE NEW FILES
          if (queue.length <= 0) {
@@ -1024,6 +1058,8 @@
                          ? 'items' // equipment || item
                          : file_name.includes('bg_still_unit_')
                          ? 'cards' // bg_still_unit
+                         : file_name.includes('icon_icon_skill_')
+                         ? 'skill' // icon_icon_skill_
                          : 'unit_icon' // unit
                          decrypted_name = file_name.split('_')[1];
                      files[file_name] = {
