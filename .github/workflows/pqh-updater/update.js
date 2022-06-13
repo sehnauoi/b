@@ -263,12 +263,12 @@
          });
 
          // ADD UE TO EQUIPMENT DATA
-         let ue= {};
+         let unique_equipment = {};
          result = await db.all('SELECT * FROM unique_equipment_data');
          result.forEach((row) => {
              if (row.equipment_id > 130000) {  // UE 
                  const equipment_id = (row.equipment_id).toString();
-                 if (ue[equipment_id]) {
+                 if (unique_equipment[equipment_id]) {
                      data[`${equipment_id}`] = {
                          id: equipment_id,
                          name: {
