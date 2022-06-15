@@ -966,6 +966,7 @@
  function get_new_images(data) {
      return new Promise(async (resolve) => {
          let queue = [];
+         let card = [];
  
          // CHECK EQUIPMENT
          console.log("SEARCHING FOR MISSING ITEM IMAGES...");
@@ -1016,7 +1017,7 @@
          for (const key in data.unit) {            
              // CHECK IF IMAGE ALREADY EXISTS
              if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'cards', `${key}.png`)) && key !== `${key.substring(0, 4)}0${key.substring(5)}`) {
-                 queue.push(`bg_still_unit_${key}`);
+                 card.push(`bg_still_unit_${key}`);
              }
          }
 
@@ -1039,11 +1040,13 @@
  
          console.log(`FOUND ${queue.length} MISSING IMAGES. DOWNLOADING AND DECRYPTING THEM NOW...`);
          console.log(queue);
+         console.log(`FOUND ${card.length} MISSING IMAGES. DOWNLOADING AND DECRYPTING THEM NOW...`);
+         console.log(card);
          const cards = await extract_cards(queue); 
-         const files = await extract_images(queue);
+         const files = await extract_images(card);
          resolve();
 
-         function extract_cards(queue) {
+         function extract_cards(card) {
             return new Promise(async (resolve) => {
                  const encrypted_dir = path.join(DIRECTORY.SETUP, 'encrypted');
                  check_directory(encrypted_dir, true);
@@ -1052,13 +1055,13 @@
                  const manifest = fs.readFileSync(path.join(DIRECTORY.DATABASE, 'manifest'), 'utf8');
                  let cards = {};
 
-                 queue.forEach((file_name) => {
+                 card.forEach((file_name) => {
                      const index = manifest.indexOf(file_name),
                          line_end = manifest.indexOf('\n', index),
                          file_data = manifest.substring(index, line_end).split(','),
                          type = file_name.includes('bg_still_unit_')
                          ? 'cards' // bg_still_unit_
-                         : 'unit_icon', // unit
+                         : 'cards', // unit
                          decrypted_name = file_name.split('_')[3];
                          cards[file_name] = {
                          hash: file_data[1],
