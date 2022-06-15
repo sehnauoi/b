@@ -1057,8 +1057,8 @@
                          file_data = manifest.substring(index, line_end).split(','),
                          type = file_name.includes('equipment') || file_name.includes('item')
                          ? 'items' // equipment || item
-                        //  : file_name.includes('bg_still_unit')
-                        //  ? 'cards' // bg_still_unit
+                         : file_name.includes('bg_still_unit')
+                         ? 'cards' // bg_still_unit
                          : file_name.includes('skill')
                          ? 'skill' // icon_icon_skill
                          : 'unit_icon', // unit
@@ -1068,7 +1068,7 @@
                          encrypted: path.join(DIRECTORY.SETUP, 'encrypted', `${file_name}.unity3d`),
                          // CONVERT unit_icon IMAGE NAME BACK TO 0star RARITY SO IT CAN BE ACCESSED MORE EASILY
                          // REASON BEING IS THAT unit_id IS SAVED AS 0star RARITY ID
-                         decrypted: path.join(DIRECTORY.IMAGE_OUTPUT, type, `${type !== 'unit_icon','bg_still_unit'
+                         decrypted: path.join(DIRECTORY.IMAGE_OUTPUT, type, `${type !== 'unit_icon' || 'bg_still_unit'
                              ? decrypted_name : `${decrypted_name}`}.png`),
                      };
                  });
