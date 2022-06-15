@@ -1030,7 +1030,19 @@
                 queue.push(`skill_${key}`);
             }
          }
+
+         console.log(`FOUND ${card.length} MISSING IMAGES. DOWNLOADING AND DECRYPTING THEM NOW...`);
+         console.log(card)
+         console.log(`FOUND ${queue.length} MISSING IMAGES. DOWNLOADING AND DECRYPTING THEM NOW...`);
+         console.log(queue);;
  
+         // EXTRACT IF THERE ARE NEW FILES
+         if (card.length <= 0) {
+             console.log("NO MISSING CARDS FOUND.");
+             resolve();
+             return;
+         }
+
          // EXTRACT IF THERE ARE NEW FILES
          if (queue.length <= 0) {
              console.log("NO MISSING IMAGES FOUND.");
@@ -1038,17 +1050,6 @@
              return;
          }
 
-        // EXTRACT IF THERE ARE NEW FILES
-         if (card.length <= 0) {
-             console.log("NO MISSING CARDS FOUND.");
-             resolve();
-             return;
-         }
- 
-         console.log(`FOUND ${queue.length} MISSING IMAGES. DOWNLOADING AND DECRYPTING THEM NOW...`);
-         console.log(queue);
-         console.log(`FOUND ${card.length} MISSING IMAGES. DOWNLOADING AND DECRYPTING THEM NOW...`);
-         console.log(card);
          const cards = await extract_cards(card); 
          const files = await extract_images(queue);
          resolve();
