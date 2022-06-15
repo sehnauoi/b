@@ -1075,7 +1075,7 @@
                          encrypted: path.join(DIRECTORY.SETUP, 'encrypted', `${file_name}.unity3d`),
                          // CONVERT unit_icon IMAGE NAME BACK TO 0star RARITY SO IT CAN BE ACCESSED MORE EASILY
                          // REASON BEING IS THAT unit_id IS SAVED AS 0star RARITY ID
-                         decrypted: path.join(DIRECTORY.IMAGE_OUTPUT, type, `${type !== 'still_'
+                         decrypted: path.join(DIRECTORY.IMAGE_OUTPUT, type, `${type !== ' '
                              ? decrypted_name : `${decrypted_name}`}.png`),
                      };
                  });
@@ -1105,13 +1105,13 @@
                  return new Promise(async function(resolve) {
                      PythonShell.run(`${__dirname}/deserialize.py`,
                          { args: [import_path, export_path] },
-                         function (results) {
-                            //  if (err) throw err;
-                            //  if (!silent) {
+                         function (err, results) {
+                             if (err) throw err;
+                             if (!silent) {
                                  for (let i of results) {
                                      console.log('[deserialize.py]', i);
                                  }
-                            //  }
+                             }
                              resolve();
                          }
                      ); 
