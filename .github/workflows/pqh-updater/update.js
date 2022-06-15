@@ -1039,26 +1039,26 @@
  
          console.log(`FOUND ${queue.length} MISSING IMAGES. DOWNLOADING AND DECRYPTING THEM NOW...`);
          console.log(queue);
+         const cards = await extract_cards(queue); 
          const files = await extract_images(queue);
-         const card = await extract_card(queue); 
          resolve();
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        function extract_card(queue) {
+
+         function extract_cards(queue) {
             return new Promise(async (resolve) => {
                 const encrypted_dir = path.join(DIRECTORY.SETUP, 'encrypted');
                 check_directory(encrypted_dir, true);
-
+        
                 // FIND FILE HASH IN MANIFEST
                 const manifest = fs.readFileSync(path.join(DIRECTORY.DATABASE, 'manifest'), 'utf8');
-                let card = {};
-
+                let cards = {};
+        
                 queue.forEach((file_name) => {
                     const index = manifest.indexOf(file_name),
                         line_end = manifest.indexOf('\n', index),
                         file_data = manifest.substring(index, line_end).split(','),
                         type = file_name.includes('bg_still_unit_') ? 'cards' : 'cards', // bg_still_unit
                         decrypted_name1 = file_name.split('_')[4];
-                        card[file_name] = {
+                    cards[file_name] = {
                         hash: file_data[1],
                         encrypted: path.join(DIRECTORY.SETUP, 'encrypted', `${file_name}.unity3d`),
                         // CONVERT unit_icon IMAGE NAME BACK TO 0star RARITY SO IT CAN BE ACCESSED MORE EASILY
@@ -1066,16 +1066,16 @@
                         decrypted: path.join(DIRECTORY.IMAGE_OUTPUT, type, `${type ? decrypted_name1 : `${decrypted_name1}`}.png`),
                     };
                 });
-
+        
                 // DOWNLOAD ENCRYPTED .unity3d cards FROM CDN
-                for (const file_name in card) {
-                    await get_asset(card[file_name].encrypted, card[file_name].hash);
-                    console.log(`DOWNLOADED ${file_name}.unity3d [${card[file_name].hash}] ; SAVED AS ${card[file_name].encrypted}`);
-                    deserialize(card[file_name].encrypted, card[file_name].decrypted);
+                for (const file_name in cards) {
+                    await get_asset(cards[file_name].encrypted, cards[file_name].hash);
+                    console.log(`DOWNLOADED ${file_name}.unity3d [${cards[file_name].hash}] ; SAVED AS ${cards[file_name].encrypted}`);
+                    deserialize(cards[file_name].encrypted, cards[file_name].decrypted);
                 }
-                resolve(card);
+                resolve(cards);
             });
-
+        
             function get_asset(output_path, hash) {
                 return new Promise(async function(resolve) {
                     const file = fs.createWriteStream(output_path);
@@ -1087,7 +1087,7 @@
                     });
                 });
             }
-
+        
             function deserialize(import_path, export_path, silent = false) {
                 return new Promise(async function(resolve) {
                     PythonShell.run(`${__dirname}/deserialize.py`,
@@ -1188,23 +1188,9 @@
      }
  
      if (do_clean) {
-         clean(directory),
-         clean1(directory);
+         clean(directory);
      }
-
-     function clean1(dir) {
-        const card = fs.readdirSync(dir);
-        for (const cards of card) {
-            if (fs.statSync(path.join(dir, cards)).isDirectory()) {
-                clean1(path.join(dir, cards));
-                fs.rmdirSync(path.join(dir, cards));
-            }
-            else {
-                fs.unlinkSync(path.join(dir, cards));
-            }
-        }
-    }
-
+ 
      function clean(dir) {
          const files = fs.readdirSync(dir);
          for (const file of files) {
