@@ -1037,6 +1037,13 @@
              resolve();
              return;
          }
+
+        // EXTRACT IF THERE ARE NEW FILES
+         if (card.length <= 0) {
+             console.log("NO MISSING CARDS FOUND.");
+             resolve();
+             return;
+         }
  
          console.log(`FOUND ${queue.length} MISSING IMAGES. DOWNLOADING AND DECRYPTING THEM NOW...`);
          console.log(queue);
