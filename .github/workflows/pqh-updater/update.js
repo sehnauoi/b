@@ -962,6 +962,70 @@
      });
  }
  
+ function extract_cards(queue) {
+    return new Promise(async (resolve) => {
+        const encrypted_dir = path.join(DIRECTORY.SETUP, 'encrypted');
+        check_directory(encrypted_dir, true);
+
+        // FIND FILE HASH IN MANIFEST
+        const manifest = fs.readFileSync(path.join(DIRECTORY.DATABASE, 'manifest'), 'utf8');
+        let cards = {};
+
+        queue.forEach((file_name) => {
+            const index = manifest.indexOf(file_name),
+                line_end = manifest.indexOf('\n', index),
+                file_data = manifest.substring(index, line_end).split(','),
+                type = file_name.includes('bg_still_unit_')
+                ? 'cards' : 'cards', // bg_still_unit
+                decrypted_name1 = file_name.split('_')[4];
+            cards[file_name] = {
+                hash: file_data[1],
+                encrypted: path.join(DIRECTORY.SETUP, 'encrypted', `${file_name}.unity3d`),
+                // CONVERT unit_icon IMAGE NAME BACK TO 0star RARITY SO IT CAN BE ACCESSED MORE EASILY
+                // REASON BEING IS THAT unit_id IS SAVED AS 0star RARITY ID
+                decrypted: path.join(DIRECTORY.IMAGE_OUTPUT, type, `${type ? decrypted_name1 : `${decrypted_name1}`}.png`),
+            };
+        });
+
+        // DOWNLOAD ENCRYPTED .unity3d cards FROM CDN
+        for (const file_name in cards) {
+            await get_asset(cards[file_name].encrypted, cards[file_name].hash);
+            console.log(`DOWNLOADED ${file_name}.unity3d [${cards[file_name].hash}] ; SAVED AS ${cards[file_name].encrypted}`);
+            deserialize(cards[file_name].encrypted, cards[file_name].decrypted);
+        }
+        resolve(cards);
+    });
+
+    function get_asset(output_path, hash) {
+        return new Promise(async function(resolve) {
+            const file = fs.createWriteStream(output_path);
+            http.get(`http://prd-priconne-redive.akamaized.net/dl/pool/AssetBundles/${hash.substr(0, 2)}/${hash}`, function(response) {
+                const stream = response.pipe(file);
+                stream.on('finish', () => {
+                    resolve();
+                });
+            });
+        });
+    }
+
+    function deserialize(import_path, export_path, silent = false) {
+        return new Promise(async function(resolve) {
+            PythonShell.run(`${__dirname}/deserialize.py`,
+                { args: [import_path, export_path] },
+                function (err, results) {
+                    if (err) throw err;
+                    if (!silent) {
+                        for (let i of results) {
+                            console.log('[deserialize.py]', i);
+                        }
+                    }
+                    resolve();
+                }
+            );
+        });
+    }
+}
+
  function get_new_images(data) {
      return new Promise(async (resolve) => {
          let queue = [];
@@ -1113,70 +1177,6 @@
          }
      });
  }
-
- function extract_cards(queue) {
-    return new Promise(async (resolve) => {
-        const encrypted_dir = path.join(DIRECTORY.SETUP, 'encrypted');
-        check_directory(encrypted_dir, true);
-
-        // FIND FILE HASH IN MANIFEST
-        const manifest = fs.readFileSync(path.join(DIRECTORY.DATABASE, 'manifest'), 'utf8');
-        let cards = {};
-
-        queue.forEach((file_name) => {
-            const index = manifest.indexOf(file_name),
-                line_end = manifest.indexOf('\n', index),
-                file_data = manifest.substring(index, line_end).split(','),
-                type = file_name.includes('bg_still_unit_')
-                ? 'cards' : 'cards', // bg_still_unit
-                decrypted_name1 = file_name.split('_')[4];
-            cards[file_name] = {
-                hash: file_data[1],
-                encrypted: path.join(DIRECTORY.SETUP, 'encrypted', `${file_name}.unity3d`),
-                // CONVERT unit_icon IMAGE NAME BACK TO 0star RARITY SO IT CAN BE ACCESSED MORE EASILY
-                // REASON BEING IS THAT unit_id IS SAVED AS 0star RARITY ID
-                decrypted: path.join(DIRECTORY.IMAGE_OUTPUT, type, `${type ? decrypted_name1 : `${decrypted_name1}`}.png`),
-            };
-        });
-
-        // DOWNLOAD ENCRYPTED .unity3d cards FROM CDN
-        for (const file_name in cards) {
-            await get_asset(cards[file_name].encrypted, cards[file_name].hash);
-            console.log(`DOWNLOADED ${file_name}.unity3d [${cards[file_name].hash}] ; SAVED AS ${cards[file_name].encrypted}`);
-            deserialize(cards[file_name].encrypted, cards[file_name].decrypted);
-        }
-        resolve(cards);
-    });
-
-    function get_asset(output_path, hash) {
-        return new Promise(async function(resolve) {
-            const file = fs.createWriteStream(output_path);
-            http.get(`http://prd-priconne-redive.akamaized.net/dl/pool/AssetBundles/${hash.substr(0, 2)}/${hash}`, function(response) {
-                const stream = response.pipe(file);
-                stream.on('finish', () => {
-                    resolve();
-                });
-            });
-        });
-    }
-
-    function deserialize(import_path, export_path, silent = false) {
-        return new Promise(async function(resolve) {
-            PythonShell.run(`${__dirname}/deserialize.py`,
-                { args: [import_path, export_path] },
-                function (err, results) {
-                    if (err) throw err;
-                    if (!silent) {
-                        for (let i of results) {
-                            console.log('[deserialize.py]', i);
-                        }
-                    }
-                    resolve();
-                }
-            );
-        });
-    }
-}
  
  function check_directory(directory, do_clean = false) {
      if (!directory) {
