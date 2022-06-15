@@ -1129,9 +1129,9 @@
                 file_data = manifest.substring(index, line_end).split(','),
                 type = file_name.includes('bg_still_unit')
                 ? 'cards' : '', // bg_still_unit
-                decrypted_name = file_name.split('_')[1];
+                decrypted_name = file_name.split('_')[3];
             cards[file_name] = {
-                hash: file_data[3],
+                hash: file_data[1],
                 encrypted: path.join(DIRECTORY.SETUP, 'encrypted', `${file_name}.unity3d`),
                 // CONVERT unit_icon IMAGE NAME BACK TO 0star RARITY SO IT CAN BE ACCESSED MORE EASILY
                 // REASON BEING IS THAT unit_id IS SAVED AS 0star RARITY ID
