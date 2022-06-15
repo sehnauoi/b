@@ -1056,7 +1056,7 @@
                          file_data = manifest.substring(index, line_end).split(','),
                          type = file_name.includes('equipment') || file_name.includes('item')
                          ? 'items' // equipment || item
-                         : file_name.includes('bg_still_unit')
+                         : file_name.includes('still_')
                          ? 'cards' // bg_still_unit
                          : file_name.includes('skill')
                          ? 'skill' // icon_icon_skill
