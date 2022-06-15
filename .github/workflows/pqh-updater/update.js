@@ -991,7 +991,7 @@
          }
  
          // CHECK CHARACTERS ICON 3 & 6 star
-         console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
+         console.log("SEARCHING FOR MISSING 3 & 6 STAR CHARACTERS ICON...");
          for (const key in data.unit) {
                         
              // CHECK IF IMAGE ALREADY EXISTS
@@ -1001,7 +1001,7 @@
          }
 
          // CHECK CHARACTERS ICON 1 star
-         console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
+         console.log("SEARCHING FOR MISSING 1 STAR CHARACTERS ICON...");
          for (const key in data.character) {
             // GET THE 1/3/6 star RARITY IMAGE
             const unit_1 = `${key.substring(0, 4)}1${key.substring(5)}`;
@@ -1013,7 +1013,7 @@
          }
 
          // CHECK CHARACTERS CARDS
-         console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
+         console.log("SEARCHING FOR MISSING CHARACTER CARDS...");
          for (const key in data.unit) {            
              // CHECK IF IMAGE ALREADY EXISTS
              if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'cards', `${key}.png`)) && key !== `${key.substring(0, 4)}0${key.substring(5)}`) {
@@ -1022,7 +1022,7 @@
          }
 
          // CHECK SKILLS ICON
-         console.log("SEARCHING FOR MISSING CHARACTER IMAGES...");
+         console.log("SEARCHING FOR MISSING SKILLS ICON...");
          for (const key in data.skill) {
                         
              // CHECK IF IMAGE ALREADY EXISTS
@@ -1049,8 +1049,8 @@
          console.log(queue);
          console.log(`FOUND ${card.length} MISSING IMAGES. DOWNLOADING AND DECRYPTING THEM NOW...`);
          console.log(card);
-         const cards = await extract_cards(queue); 
-         const files = await extract_images(card);
+         const cards = await extract_cards(card); 
+         const files = await extract_images(queue);
          resolve();
 
          function extract_cards(card) {
