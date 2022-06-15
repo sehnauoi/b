@@ -1042,9 +1042,8 @@
              resolve();
              return;
          }
-
          // EXTRACT IF THERE ARE NEW FILES
-         if (queue.length <= 0) {
+         else if (queue.length <= 0) {
              console.log("NO MISSING IMAGES FOUND.");
              resolve();
              return;
