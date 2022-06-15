@@ -1066,7 +1066,7 @@
                      const index = manifest.indexOf(file_name),
                          line_end = manifest.indexOf('\n', index),
                          file_data = manifest.substring(index, line_end).split(','),
-                         type = file_name.includes('bg_still_unit_')
+                         type = file_name.includes('still_')
                          ? 'cards' // bg_still_unit_
                          : 'cards', // unit
                          decrypted_name = file_name.split('_')[3];
@@ -1075,7 +1075,7 @@
                          encrypted: path.join(DIRECTORY.SETUP, 'encrypted', `${file_name}.unity3d`),
                          // CONVERT unit_icon IMAGE NAME BACK TO 0star RARITY SO IT CAN BE ACCESSED MORE EASILY
                          // REASON BEING IS THAT unit_id IS SAVED AS 0star RARITY ID
-                         decrypted: path.join(DIRECTORY.IMAGE_OUTPUT, type, `${type !== 'bg_still_unit_'
+                         decrypted: path.join(DIRECTORY.IMAGE_OUTPUT, type, `${type !== 'still_'
                              ? decrypted_name : `${decrypted_name}`}.png`),
                      };
                  });
