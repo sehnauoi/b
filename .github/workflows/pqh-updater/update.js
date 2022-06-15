@@ -1070,7 +1070,7 @@
                      };
                  });
  
-                 // DOWNLOAD ENCRYPTED .unity3d FILES FROM CDN
+                 // DOWNLOAD ENCRYPTED .unity3d cards FROM CDN
                  for (const file_name in cards) {
                      await get_asset(cards[file_name].encrypted, cards[file_name].hash);
                      console.log(`DOWNLOADED ${file_name}.unity3d [${cards[file_name].hash}] ; SAVED AS ${cards[file_name].encrypted}`);
@@ -1095,8 +1095,8 @@
                  return new Promise(async function(resolve) {
                      PythonShell.run(`${__dirname}/deserialize.py`,
                          { args: [import_path, export_path] },
-                         function (err, results) {
-                             if (err) throw err;
+                         function (results) {
+                            //  if (err) throw err;
                              if (!silent) {
                                  for (let i of results) {
                                      console.log('[deserialize.py]', i);
