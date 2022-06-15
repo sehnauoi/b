@@ -965,8 +965,8 @@
 
  function get_new_images(data) {
      return new Promise(async (resolve) => {
-         let queue = [];
          let card = [];
+         let queue = [];
  
          // CHECK EQUIPMENT
          console.log("SEARCHING FOR MISSING ITEM IMAGES...");
