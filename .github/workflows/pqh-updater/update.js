@@ -221,7 +221,7 @@
             filename: path.join(DIRECTORY.DATABASE, 'master_jp.db'),
             driver: sqlite3.Database
         });
-        result = await db.all('SELECT * FROM enemy_parameter WHERE unit_id > 300000');
+        result = await db.all('SELECT * FROM enemy_parameter WHERE unit_id BETWEEN 300000 AND 306000');
         result.forEach((row) => {
             data[`${row.unit_id}`] = {
                 id: `${row.unit_id}`,
@@ -1058,7 +1058,7 @@
          // CHECK BOSS ICON
          console.log("SEARCHING FOR MISSING BOSS ICON...");
          for (const key in data.boss) {
-            const a_0 = `${key.substring(0, 5)}0`;
+            const a_0 = `${key.substring(0, 5)}1`;
                         
              // CHECK IF IMAGE ALREADY EXISTS
              if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'boss', `${key}.png`))) {
