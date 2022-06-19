@@ -989,7 +989,6 @@
 
  function get_new_images(data) {
      return new Promise(async (resolve) => {
-         let card = [];
          let queue = [];
  
          // CHECK EQUIPMENT
@@ -1036,16 +1035,6 @@
             }
          }
 
-         // CHECK CHARACTERS CARDS
-         console.log("SEARCHING FOR MISSING CHARACTER CARDS...");
-         for (const key in data.unit) {            
-             // CHECK IF IMAGE ALREADY EXISTS
-             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'cards', `${key}.png`)) && key !== `${key.substring(0, 4)}0${key.substring(5)}`) {
-                //  card.push(`bg_still_unit_${key}`);
-                 queue.push(`bg_still_unit_${key}`);
-             }
-         }
-
          // CHECK SKILLS ICON
          console.log("SEARCHING FOR MISSING SKILLS ICON...");
          for (const key in data.skill) {
@@ -1085,7 +1074,6 @@
         //      return;
         //  }
 
-         const cards = await extract_cards(queue); 
          const files = await extract_images(queue);
 
          resolve();
@@ -1156,69 +1144,6 @@
                              resolve();
                          }
                      );
-                 });
-             }
-         }
-
-         function extract_cards(queue) {
-            return new Promise(async (resolve) => {
-                 const encrypted_dir = path.join(DIRECTORY.SETUP, 'encrypted');
-                 check_directory(encrypted_dir, true);
- 
-                 // FIND FILE HASH IN MANIFEST
-                 const manifest = fs.readFileSync(path.join(DIRECTORY.DATABASE, 'manifest'), 'utf8');
-                 let cards = {};
-
-                 queue.forEach((file_name) => {
-                     const index = manifest.indexOf(file_name),
-                         line_end = manifest.indexOf('\n', index),
-                         file_data = manifest.substring(index, line_end).split(','),
-                         type = file_name.includes('bg_still_unit')
-                         ? 'cards' : ' ', // bg_still_unit_
-                         decrypted_name = file_name.split('_')[3];
-                         cards[file_name] = {
-                         hash: file_data[1],
-                         encrypted: path.join(DIRECTORY.SETUP, 'encrypted', `${file_name}.unity3d`),
-                         decrypted: path.join(DIRECTORY.IMAGE_OUTPUT, type, `${type == 'cards'
-                             ? decrypted_name : `${decrypted_name}`}.png`),
-                     };
-                 });
- 
-                 // DOWNLOAD ENCRYPTED .unity3d FILES FROM CDN
-                 for (const file_name in cards) {
-                     await get_asset(cards[file_name].encrypted, cards[file_name].hash);
-                     console.log(`DOWNLOADED ${file_name}.unity3d [${cards[file_name].hash}] ; SAVED AS ${cards[file_name].encrypted}`);
-                     deserialize(cards[file_name].encrypted, cards[file_name].decrypted);
-                 }
-                 resolve(cards);
-             });
-
-             function get_asset(output_path, hash) {
-                 return new Promise(async function(resolve) {
-                     const file = fs.createWriteStream(output_path);
-                     http.get(`http://prd-priconne-redive.akamaized.net/dl/pool/AssetBundles/${hash.substr(0, 2)}/${hash}`, function(response) {
-                         const stream = response.pipe(file);
-                         stream.on('finish', () => {
-                             resolve();
-                         });
-                     });
-                 });
-             } 
-
-             function deserialize(import_path, export_path, silent = false) {
-                 return new Promise(async function(resolve) {
-                     PythonShell.run(`${__dirname}/deserialize.py`,
-                         { args: [import_path, export_path] },
-                         function (err, results) {
-                             if (err) throw err;
-                             if (!silent) {
-                                 for (let i of results) {
-                                     console.log('[deserialize.py]', i);
-                                 }
-                             }
-                             resolve();
-                         }
-                     ); 
                  });
              }
          }
