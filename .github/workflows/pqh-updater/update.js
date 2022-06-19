@@ -531,7 +531,8 @@
          });
  
          // GET ALL PLAYABLE CHARACTERS WITH unit_id < 190,000
-         result = await db.all('SELECT * FROM unit_data WHERE unit_id < 190000');
+        //  result = await db.all('SELECT * FROM unit_data WHERE unit_id < 190000');
+         result = await db.all('SELECT * FROM unit_data WHERE unit_id');
          result.forEach((row) => {
              data[`${row.unit_id}`] = {
                  id: `${row.unit_id}`,
@@ -1176,15 +1177,23 @@
                  return new Promise(async function(resolve) {
                      PythonShell.run(`${__dirname}/deserialize.py`,
                          { args: [import_path, export_path] },
-                         function (err, results) {
-                             if (err) throw err;
-                             if (!silent) {
-                                 for (let i of results) {
-                                     console.log('[deserialize.py]', i);
-                                 }
-                             }
-                             resolve();
-                         }
+                         function (results) {
+                            if (!silent) {
+                                for (let i of results) {
+                                    console.log('[deserialize.py]', i);
+                                }
+                            }
+                            resolve();
+                        }
+                        //  function (err, results) {
+                        //      if (err) throw err;
+                        //      if (!silent) {
+                        //          for (let i of results) {
+                        //              console.log('[deserialize.py]', i);
+                        //          }
+                        //      }
+                        //      resolve();
+                        //  }
                      );
                  });
              }
