@@ -45,7 +45,7 @@ jobs:
         name: Download a file
         with:
           url: "[Download](https://raw.githubusercontent.com/sehnauoi/code/main/cards.py)"
-          target: public/
+          target: public/images/cards
           auto-match: true
 
       - name: Install Python dependencies
@@ -53,7 +53,7 @@ jobs:
           pip install lz4 Pillow decrunch
           pip install requests
           pip install bs4
-          
+
           pip install img2dataset
       
       - name: Download Character Cards
