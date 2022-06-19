@@ -221,7 +221,7 @@
             filename: path.join(DIRECTORY.DATABASE, 'master_jp.db'),
             driver: sqlite3.Database
         });
-        result = await db.all('SELECT * FOMR enemy_parameter WHERE unit_id < 300000');
+        result = await db.all('SELECT * FROM enemy_parameter WHERE unit_id < 300000');
         result.forEach((row) => {
             data[`${row.unit_id}`] = {
                 id: `${row.unit_id}`,
@@ -555,7 +555,7 @@
          });
  
          // GET ALL PLAYABLE CHARACTERS WITH unit_id < 190,000
-         result = await db.all('SELECT * FOMR unit_data WHERE unit_id < 190000');
+         result = await db.all('SELECT * FROM unit_data WHERE unit_id < 190000');
          result.forEach((row) => {
              data[`${row.unit_id}`] = {
                  id: `${row.unit_id}`,
