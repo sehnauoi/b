@@ -1024,16 +1024,6 @@
             }
          }
 
-         // CHECK BOSS ICON
-         console.log("SEARCHING FOR MISSING BOSS ICON...");
-         for (const key in data.boss) {
-                        
-             // CHECK IF IMAGE ALREADY EXISTS
-             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key}.png`)) && key !== `${key.substring(0, 4)}0${key.substring(5)}`) {
-                queue.push(`unit_${key}`);
-            }
-         }
-
          // CHECK CHARACTERS ICON 1 star
          console.log("SEARCHING FOR MISSING 1 STAR CHARACTERS ICON...");
          for (const key in data.character) {
