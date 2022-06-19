@@ -70,7 +70,7 @@
      data.unit = unit_data;
 
      const boss_data = await get_boss_data();
-     data.boss = boss_data;
+     data.unit = boss_data;
 
      const skill_data = await get_skill_data();
      data.skill = skill_data;
@@ -1083,7 +1083,7 @@
         //      return;
         //  }
 
-         const cards = await extract_cards(card); 
+        //  const cards = await extract_cards(card); 
          const files = await extract_images(queue);
 
          resolve();
