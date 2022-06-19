@@ -1174,7 +1174,7 @@
                          line_end = manifest.indexOf('\n', index),
                          file_data = manifest.substring(index, line_end).split(','),
                          type = file_name.includes('bg_still_unit')
-                         ? 'cards' : 'cards', // bg_still_unit_
+                         ? 'cards' : ' ', // bg_still_unit_
                          decrypted_name = file_name.split('_')[3];
                          cards[file_name] = {
                          hash: file_data[1],
@@ -1185,12 +1185,12 @@
                  });
  
                  // DOWNLOAD ENCRYPTED .unity3d FILES FROM CDN
-                 for (const file_name in files) {
-                     await get_asset(files[file_name].encrypted, files[file_name].hash);
-                     console.log(`DOWNLOADED ${file_name}.unity3d [${files[file_name].hash}] ; SAVED AS ${files[file_name].encrypted}`);
-                     deserialize(files[file_name].encrypted, files[file_name].decrypted);
+                 for (const file_name in cards) {
+                     await get_asset(cards[file_name].encrypted, cards[file_name].hash);
+                     console.log(`DOWNLOADED ${file_name}.unity3d [${cards[file_name].hash}] ; SAVED AS ${cards[file_name].encrypted}`);
+                     deserialize(cards[file_name].encrypted, cards[file_name].decrypted);
                  }
-                 resolve(files);
+                 resolve(cards);
              });
 
              function get_asset(output_path, hash) {
