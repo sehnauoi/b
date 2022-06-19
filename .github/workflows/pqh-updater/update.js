@@ -1102,15 +1102,17 @@
                  });
              } 
 
-             function deserialize(import_path, export_path, results) {
+             function deserialize(import_path, export_path, silent = false) {
                  return new Promise(async function(resolve) {
                      PythonShell.run(`${__dirname}/deserialize.py`,
                          { args: [import_path, export_path] },
-                         function (results) {
+                         function (err, results) {
+                             if (err) throw err;
+                             if (!silent) {
                                  for (let i of results) {
                                      console.log('[deserialize.py]', i);
                                  }
-                             
+                             }
                              resolve();
                          }
                      ); 
