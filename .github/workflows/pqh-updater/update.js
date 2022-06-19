@@ -1138,7 +1138,7 @@
                      const index = manifest.indexOf(file_name),
                          line_end = manifest.indexOf('\n', index),
                          file_data = manifest.substring(index, line_end).split(','),
-                         type = file_name.includes('still_')
+                         type = file_name.includes('bg_still_unit_')
                          ? 'cards' // bg_still_unit_
                          : 'cards', // unit
                          decrypted_name = file_name.split('_')[3];
