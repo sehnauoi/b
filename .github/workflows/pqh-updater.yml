@@ -53,9 +53,8 @@ jobs:
           pip install lz4 Pillow decrunch
           pip install requests
           pip install bs4
-
-          pip install img2dataset
-      
+          pip install shutil
+                
       - name: Download Character Cards
         run: |
           cd public
