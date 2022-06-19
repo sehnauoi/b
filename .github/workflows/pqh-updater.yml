@@ -50,8 +50,11 @@ jobs:
       - name: copy database
         run: |
           cd ..
+          cd ..
+          cd ..
+          cd ..
           ls
-          cp -r database /../database
+          cp -r database /../../../../database
 
       # assuming there are new changes
       - name: Update images on Git
