@@ -1106,8 +1106,7 @@
                  return new Promise(async function(resolve) {
                      PythonShell.run(`${__dirname}/deserialize.py`,
                          { args: [import_path, export_path] },
-                         function (err, results) {
-                             if (err) throw err;
+                         function (results) {
                              if (!silent) {
                                  for (let i of results) {
                                      console.log('[deserialize.py]', i);
@@ -1177,23 +1176,15 @@
                  return new Promise(async function(resolve) {
                      PythonShell.run(`${__dirname}/deserialize.py`,
                          { args: [import_path, export_path] },
-                         function (results) {
-                            if (!silent) {
-                                for (let i of results) {
-                                    console.log('[deserialize.py]', i);
-                                }
-                            }
-                            resolve();
-                        }
-                        //  function (err, results) {
-                        //      if (err) throw err;
-                        //      if (!silent) {
-                        //          for (let i of results) {
-                        //              console.log('[deserialize.py]', i);
-                        //          }
-                        //      }
-                        //      resolve();
-                        //  }
+                         function (err, results) {
+                             if (err) throw err;
+                             if (!silent) {
+                                 for (let i of results) {
+                                     console.log('[deserialize.py]', i);
+                                 }
+                             }
+                             resolve();
+                         }
                      );
                  });
              }
