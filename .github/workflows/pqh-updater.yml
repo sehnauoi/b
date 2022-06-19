@@ -47,14 +47,14 @@ jobs:
         id: update
         run: node ./.github/workflows/pqh-updater/update.js
 
-      - name: copy database
-        run: |
-          cd ..
-          cd ..
-          cd ..
-          cd ..
-          ls
-          cp -r database /../../../../database
+      # - name: copy database
+      #   run: |
+      #     cd ..
+      #     cd ..
+      #     cd ..
+      #     cd ..
+      #     ls
+      #     cp -r database /../../../../database
 
       # assuming there are new changes
       - name: Update images on Git
@@ -66,7 +66,6 @@ jobs:
           git add ./public/data.json
           git add ./public/data.min.json
           git add ./public/images
-          git add ./database
           git diff-index --quiet HEAD || git commit -m "[Bot] Data Update" -m '
           ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           This is an automated process. Issues may or may not have occured.'
