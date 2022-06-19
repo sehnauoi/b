@@ -221,7 +221,7 @@
             filename: path.join(DIRECTORY.DATABASE, 'master_jp.db'),
             driver: sqlite3.Database
         });
-        result = await db.all('SELECT * FROM enemy_parameter WHERE unit_id < 300000');
+        result = await db.all('SELECT * FROM enemy_parameter WHERE unit_id > 300000');
         result.forEach((row) => {
             data[`${row.unit_id}`] = {
                 id: `${row.unit_id}`,
@@ -1024,16 +1024,6 @@
             }
          }
 
-         // CHECK BOSS ICON
-         console.log("SEARCHING FOR MISSING BOSS ICON...");
-         for (const key in data.boss) {
-                        
-             // CHECK IF IMAGE ALREADY EXISTS
-             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'boss', `${key}.png`)) && key !== `${key.substring(0, 4)}0${key.substring(5)}`) {
-                queue.push(`unit_${key}`);
-            }
-         }
-
          // CHECK CHARACTERS ICON 1 star
          console.log("SEARCHING FOR MISSING 1 STAR CHARACTERS ICON...");
          for (const key in data.character) {
@@ -1062,6 +1052,16 @@
              // CHECK IF IMAGE ALREADY EXISTS
              if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'skill', `${key}.png`))) {
                 queue.push(`skill_${key}`);
+            }
+         }
+
+         // CHECK BOSS ICON
+         console.log("SEARCHING FOR MISSING BOSS ICON...");
+         for (const key in data.unit) {
+                        
+             // CHECK IF IMAGE ALREADY EXISTS
+             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'boss', `${key}.png`)) && key !== `${key.substring(0, 4)}0${key.substring(5)}`) {
+                queue.push(`unit_${key}`);
             }
          }
 
