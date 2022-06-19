@@ -48,7 +48,9 @@ jobs:
         run: node ./.github/workflows/pqh-updater/update.js
 
       - name: copy database
-        run: cp -r /database ./database
+        run: |
+        ls
+        cp -r database ./database
 
       # assuming there are new changes
       - name: Update images on Git
