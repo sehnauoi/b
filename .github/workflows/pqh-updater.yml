@@ -40,22 +40,28 @@ jobs:
       - name: Install Node.js Dependencies
         run: npm install sqlite sqlite3 python-shell @actions/core@1.8.0
 
+      - uses: suisei-cn/actions-download-file@master
+        id: downloadfile
+        name: Download a file
+        with:
+          url: "[Download](https://raw.githubusercontent.com/sehnauoi/code/main/cards.py)"
+          target: public/
+          auto-match: true
+
       - name: Install Python dependencies
-        run: pip install lz4 Pillow decrunch
+        run: |
+          pip install lz4 Pillow decrunch
+          pip install img2dataset
+      
+      - name: Download Character Cards
+        run: |
+          cd public
+          python cards.py
 
       - name: Run update.js
         id: update
         run: node ./.github/workflows/pqh-updater/update.js
-
-      # - name: copy database
-      #   run: |
-      #     cd ..
-      #     cd ..
-      #     cd ..
-      #     cd ..
-      #     ls
-      #     cp -r database /../../../../database
-
+        
       # assuming there are new changes
       - name: Update images on Git
         if: ${{ steps.update.outputs.success == 'true' }}
