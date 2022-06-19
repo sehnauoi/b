@@ -1068,15 +1068,15 @@
                      const index = manifest.indexOf(file_name),
                          line_end = manifest.indexOf('\n', index),
                          file_data = manifest.substring(index, line_end).split(','),
-                         type =file_name.includes('bg_still_unit_')
+                         type = file_name.includes('bg_still_unit_')
                          ? 'cards' : 'cards', // bg_still_unit_
                          decrypted_name = file_name.split('_')[3];
                          cards[file_name] = {
-                         hash: file_data[1],
+                         hash: file_data[2],
                          encrypted: path.join(DIRECTORY.SETUP, 'encrypted', `${file_name}.unity3d`),
                          // CONVERT unit_icon IMAGE NAME BACK TO 0star RARITY SO IT CAN BE ACCESSED MORE EASILY
                          // REASON BEING IS THAT unit_id IS SAVED AS 0star RARITY ID
-                         decrypted: path.join(DIRECTORY.IMAGE_OUTPUT, type, `${type !== 'cards'
+                         decrypted: path.join(DIRECTORY.IMAGE_OUTPUT, type, `${type == 'cards'
                              ? decrypted_name : `${decrypted_name}`}.png`),
                      };
                  });
@@ -1120,75 +1120,75 @@
              }
          }
  
-        //  function extract_images(queue) {
-        //      return new Promise(async (resolve) => {
-        //          const encrypted_dir = path.join(DIRECTORY.SETUP, 'encrypted');
-        //          check_directory(encrypted_dir, true);
+         function extract_images(queue) {
+             return new Promise(async (resolve) => {
+                 const encrypted_dir = path.join(DIRECTORY.SETUP, 'encrypted');
+                 check_directory(encrypted_dir, true);
  
-        //          // FIND FILE HASH IN MANIFEST
-        //          const manifest = fs.readFileSync(path.join(DIRECTORY.DATABASE, 'manifest'), 'utf8');
-        //          let files = {};
+                 // FIND FILE HASH IN MANIFEST
+                 const manifest = fs.readFileSync(path.join(DIRECTORY.DATABASE, 'manifest'), 'utf8');
+                 let files = {};
  
-        //          queue.forEach((file_name) => {
-        //              const index = manifest.indexOf(file_name),
-        //                  line_end = manifest.indexOf('\n', index),
-        //                  file_data = manifest.substring(index, line_end).split(','),
-        //                  type = file_name.includes('equipment') || file_name.includes('item')
-        //                  ? 'items' // equipment || item
-        //                 //  : file_name.includes('bg_still_unit_')
-        //                 //  ? 'cards' // bg_still_unit_
-        //                  : file_name.includes('skill')
-        //                  ? 'skill' // icon_icon_skill
-        //                  : 'unit_icon', // unit
-        //                  decrypted_name = file_name.split('_')[1];
-        //              files[file_name] = {
-        //                  hash: file_data[1],
-        //                  encrypted: path.join(DIRECTORY.SETUP, 'encrypted', `${file_name}.unity3d`),
-        //                  // CONVERT unit_icon IMAGE NAME BACK TO 0star RARITY SO IT CAN BE ACCESSED MORE EASILY
-        //                  // REASON BEING IS THAT unit_id IS SAVED AS 0star RARITY ID
-        //                  decrypted: path.join(DIRECTORY.IMAGE_OUTPUT, type, `${type !== 'unit_icon'
-        //                      ? decrypted_name : `${decrypted_name}`}.png`),
-        //              };
-        //          });
+                 queue.forEach((file_name) => {
+                     const index = manifest.indexOf(file_name),
+                         line_end = manifest.indexOf('\n', index),
+                         file_data = manifest.substring(index, line_end).split(','),
+                         type = file_name.includes('equipment') || file_name.includes('item')
+                         ? 'items' // equipment || item
+                        //  : file_name.includes('bg_still_unit_')
+                        //  ? 'cards' // bg_still_unit_
+                         : file_name.includes('skill')
+                         ? 'skill' // icon_icon_skill
+                         : 'unit_icon', // unit
+                         decrypted_name = file_name.split('_')[1];
+                     files[file_name] = {
+                         hash: file_data[1],
+                         encrypted: path.join(DIRECTORY.SETUP, 'encrypted', `${file_name}.unity3d`),
+                         // CONVERT unit_icon IMAGE NAME BACK TO 0star RARITY SO IT CAN BE ACCESSED MORE EASILY
+                         // REASON BEING IS THAT unit_id IS SAVED AS 0star RARITY ID
+                         decrypted: path.join(DIRECTORY.IMAGE_OUTPUT, type, `${type !== 'unit_icon'
+                             ? decrypted_name : `${decrypted_name}`}.png`),
+                     };
+                 });
  
-        //          // DOWNLOAD ENCRYPTED .unity3d FILES FROM CDN
-        //          for (const file_name in files) {
-        //              await get_asset(files[file_name].encrypted, files[file_name].hash);
-        //              console.log(`DOWNLOADED ${file_name}.unity3d [${files[file_name].hash}] ; SAVED AS ${files[file_name].encrypted}`);
-        //              deserialize(files[file_name].encrypted, files[file_name].decrypted);
-        //          }
-        //          resolve(files);
-        //      });
+                 // DOWNLOAD ENCRYPTED .unity3d FILES FROM CDN
+                 for (const file_name in files) {
+                     await get_asset(files[file_name].encrypted, files[file_name].hash);
+                     console.log(`DOWNLOADED ${file_name}.unity3d [${files[file_name].hash}] ; SAVED AS ${files[file_name].encrypted}`);
+                     deserialize(files[file_name].encrypted, files[file_name].decrypted);
+                 }
+                 resolve(files);
+             });
  
-        //      function get_asset(output_path, hash) {
-        //          return new Promise(async function(resolve) {
-        //              const file = fs.createWriteStream(output_path);
-        //              http.get(`http://prd-priconne-redive.akamaized.net/dl/pool/AssetBundles/${hash.substr(0, 2)}/${hash}`, function(response) {
-        //                  const stream = response.pipe(file);
-        //                  stream.on('finish', () => {
-        //                      resolve();
-        //                  });
-        //              });
-        //          });
-        //      }
+             function get_asset(output_path, hash) {
+                 return new Promise(async function(resolve) {
+                     const file = fs.createWriteStream(output_path);
+                     http.get(`http://prd-priconne-redive.akamaized.net/dl/pool/AssetBundles/${hash.substr(0, 2)}/${hash}`, function(response) {
+                         const stream = response.pipe(file);
+                         stream.on('finish', () => {
+                             resolve();
+                         });
+                     });
+                 });
+             }
  
-        //      function deserialize(import_path, export_path, silent = false) {
-        //          return new Promise(async function(resolve) {
-        //              PythonShell.run(`${__dirname}/deserialize.py`,
-        //                  { args: [import_path, export_path] },
-        //                  function (err, results) {
-        //                      if (err) throw err;
-        //                      if (!silent) {
-        //                          for (let i of results) {
-        //                              console.log('[deserialize.py]', i);
-        //                          }
-        //                      }
-        //                      resolve();
-        //                  }
-        //              );
-        //          });
-        //      }
-        //  }
+             function deserialize(import_path, export_path, silent = false) {
+                 return new Promise(async function(resolve) {
+                     PythonShell.run(`${__dirname}/deserialize.py`,
+                         { args: [import_path, export_path] },
+                         function (err, results) {
+                             if (err) throw err;
+                             if (!silent) {
+                                 for (let i of results) {
+                                     console.log('[deserialize.py]', i);
+                                 }
+                             }
+                             resolve();
+                         }
+                     );
+                 });
+             }
+         }
 
      });
  }
