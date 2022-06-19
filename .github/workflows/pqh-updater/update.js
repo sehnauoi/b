@@ -80,7 +80,7 @@
  
      console.log("UPDATE COMPLETE!");
      write_file(path.join(DIRECTORY.DATA_OUTPUT, 'data.json'), data.character, true);
-     write_file(path.join(DIRECTORY.DATA_OUTPUT, 'data.min.json'), data);
+    //  write_file(path.join(DIRECTORY.DATA_OUTPUT, 'data.min.json'), data);
      write_file(path.join(DIRECTORY.DATA_OUTPUT, 'version'), latest);
      core.setOutput("success", true);
  }
