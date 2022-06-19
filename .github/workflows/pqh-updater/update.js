@@ -1054,25 +1054,16 @@
              if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key.substring(0, 5)}1.png`))) {
                 queue.push(`unit_${a_0}`);
             }
+         }  
+         // EXTRACT IF THERE ARE NEW FILES
+         if (queue.length <= 0) {
+             console.log("NO MISSING IMAGES FOUND.");
+             resolve();
+             return;
          }
 
-         console.log(`FOUND ${card.length} MISSING IMAGES. DOWNLOADING AND DECRYPTING THEM NOW...`);
-         console.log(card)
          console.log(`FOUND ${queue.length} MISSING IMAGES. DOWNLOADING AND DECRYPTING THEM NOW...`);
          console.log(queue);;
- 
-        //  // EXTRACT IF THERE ARE NEW FILES
-        //  if (card.length <= 0) {
-        //      console.log("NO MISSING CARDS FOUND.");
-        //      resolve();
-        //      return;
-        //  }
-        //  // EXTRACT IF THERE ARE NEW FILES
-        //  else if (queue.length <= 0) {
-        //      console.log("NO MISSING IMAGES FOUND.");
-        //      resolve();
-        //      return;
-        //  }
 
          const files = await extract_images(queue);
 
