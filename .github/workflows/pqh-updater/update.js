@@ -1041,7 +1041,8 @@
          for (const key in data.unit) {            
              // CHECK IF IMAGE ALREADY EXISTS
              if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'cards', `${key}.png`)) && key !== `${key.substring(0, 4)}0${key.substring(5)}`) {
-                 card.push(`bg_still_unit_${key}`);
+                //  card.push(`bg_still_unit_${key}`);
+                 queue.push(`bg_still_unit_${key}`);
              }
          }
 
@@ -1084,7 +1085,7 @@
         //      return;
         //  }
 
-         const cards = await extract_cards(card); 
+         const cards = await extract_cards(queue); 
          const files = await extract_images(queue);
 
          resolve();
@@ -1159,7 +1160,7 @@
              }
          }
 
-         function extract_cards(card) {
+         function extract_cards(queue) {
             return new Promise(async (resolve) => {
                  const encrypted_dir = path.join(DIRECTORY.SETUP, 'encrypted');
                  check_directory(encrypted_dir, true);
@@ -1168,7 +1169,7 @@
                  const manifest = fs.readFileSync(path.join(DIRECTORY.DATABASE, 'manifest'), 'utf8');
                  let cards = {};
 
-                 card.forEach((file_name) => {
+                 queue.forEach((file_name) => {
                      const index = manifest.indexOf(file_name),
                          line_end = manifest.indexOf('\n', index),
                          file_data = manifest.substring(index, line_end).split(','),
@@ -1184,12 +1185,12 @@
                  });
  
                  // DOWNLOAD ENCRYPTED .unity3d FILES FROM CDN
-                 for (const file_name in cards) {
-                     await get_asset(cards[file_name].encrypted, cards[file_name].hash);
-                     console.log(`DOWNLOADED ${file_name}.unity3d [${cards[file_name].hash}] ; SAVED AS ${cards[file_name].encrypted}`);
-                     deserialize(cards[file_name].encrypted, cards[file_name].decrypted);
+                 for (const file_name in files) {
+                     await get_asset(files[file_name].encrypted, files[file_name].hash);
+                     console.log(`DOWNLOADED ${file_name}.unity3d [${files[file_name].hash}] ; SAVED AS ${files[file_name].encrypted}`);
+                     deserialize(files[file_name].encrypted, files[file_name].decrypted);
                  }
-                 resolve(cards);
+                 resolve(files);
              });
 
              function get_asset(output_path, hash) {
