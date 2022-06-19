@@ -57,6 +57,8 @@ jobs:
       - name: Download Character Cards
         run: |
           cd public
+          cd images
+          cd cards
           python cards.py
 
       - name: Run update.js
