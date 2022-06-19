@@ -51,6 +51,9 @@ jobs:
       - name: Install Python dependencies
         run: |
           pip install lz4 Pillow decrunch
+          pip install requests
+          pip install bs4
+          
           pip install img2dataset
       
       - name: Download Character Cards
@@ -61,7 +64,7 @@ jobs:
       - name: Run update.js
         id: update
         run: node ./.github/workflows/pqh-updater/update.js
-        
+
       # assuming there are new changes
       - name: Update images on Git
         if: ${{ steps.update.outputs.success == 'true' }}
