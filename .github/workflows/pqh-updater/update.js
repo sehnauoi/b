@@ -1183,11 +1183,11 @@
                      };
                  });
  
-                 // DOWNLOAD ENCRYPTED .unity3d cards FROM CDN
+                 // DOWNLOAD ENCRYPTED .unity3d FILES FROM CDN
                  for (const file_name in cards) {
-                     await get_asset(cards[file_name].encrypted, cards[file_name].hash);
-                     console.log(`DOWNLOADED ${file_name}.unity3d [${cards[file_name].hash}] ; SAVED AS ${cards[file_name].encrypted}`);
-                     deserialize(cards[file_name].encrypted, cards[file_name].decrypted);
+                     await get_asset(files[file_name].encrypted, files[file_name].hash);
+                     console.log(`DOWNLOADED ${file_name}.unity3d [${files[file_name].hash}] ; SAVED AS ${files[file_name].encrypted}`);
+                     deserialize(files[file_name].encrypted, files[file_name].decrypted);
                  }
                  resolve(cards);
              });
