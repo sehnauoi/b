@@ -1107,12 +1107,10 @@
                      PythonShell.run(`${__dirname}/deserialize.py`,
                          { args: [import_path, export_path] },
                          function (results) {
-                             if (!silent) {
-                                 for (let i of results) {
-                                     console.log('[deserialize.py]', i);
-                                 }
-                             }
-                             resolve();
+                            for (let i of results) {
+                                console.log('[deserialize.py]', i);
+                            }
+                            resolve();
                          }
                      ); 
                  });
