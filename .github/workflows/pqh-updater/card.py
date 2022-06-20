@@ -14,7 +14,6 @@ import subprocess
 raw = []
 file = []
 hash = []
-os.chdir("../../../public/image")
 
 def get_files(): # get data from url
 
