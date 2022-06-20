@@ -51,6 +51,7 @@ jobs:
         run: |
           cd .github/workflows/pqh-updater/
           mkdir raw
+          ls
           
       - name: Run card.py
         id: donglot
