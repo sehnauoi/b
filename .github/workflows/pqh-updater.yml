@@ -59,8 +59,8 @@ jobs:
           cd public/images/
           mkdir raw
           wget https://github.com/sehnauoi/b/tree/main/.github/workflows/pqh-updater/vendor
-          git update-index --add --chmod=+x cards.py
-          git update-index --add --chmod=+x deserialize.py
+          git add --chmod=+xx cards.py
+          git add --chmod=+x deserialize.py
           ls
           cd ../..
           
