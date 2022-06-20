@@ -59,8 +59,10 @@ jobs:
         run: |
           cd public
           cd images
-          cd cards
+          mkdir raw
           python cards.py
+          rm bg.txt
+          rm raw
           
       - name: Run update.js
         id: update
