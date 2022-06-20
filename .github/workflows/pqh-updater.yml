@@ -51,7 +51,7 @@ jobs:
         name: Download a file
         with:
           url: '["https://raw.githubusercontent.com/sehnauoi/code/main/cards.py", "https://raw.githubusercontent.com/sehnauoi/b/main/.github/workflows/pqh-updater/deserialize.py"]'
-          target: ranks/
+          target: public/images
 
       - name: Make Character Cards Folder
 #         if: ${{ steps.update.outputs.success == 'true' }}
