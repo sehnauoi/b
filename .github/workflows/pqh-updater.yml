@@ -40,14 +40,6 @@ jobs:
       - name: Install Node.js Dependencies
         run: npm install sqlite sqlite3 python-shell @actions/core@1.8.0
 
-      - uses: suisei-cn/actions-download-file@master
-        id: downloadfile
-        name: Download a file
-        with:
-          url: "[Download](https://raw.githubusercontent.com/sehnauoi/code/main/cards.py)"
-          target: public/images
-          auto-match: true
-
       - name: Install Python dependencies
         run: |
           pip install lz4 Pillow decrunch
@@ -60,9 +52,16 @@ jobs:
           cd public
           cd images
           mkdir raw
-          python cards.py
+          
+      - name: Run card.py
+        id: donglot
+        run: python ./.github/workflows/pqh-updater/card.py
+        
+      - name: delete unecessary
+        run: |
           rm bg.txt
-          rm raw
+          rm raw      
+          cd ..
           
       - name: Run update.js
         id: update
