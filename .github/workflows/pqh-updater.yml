@@ -46,11 +46,10 @@ jobs:
           pip install requests
           pip install bs4
           
-      - name: Download Character Cards
+      - name: Make Character Cards Folder
 #         if: ${{ steps.update.outputs.success == 'true' }}
         run: |
-          cd public
-          cd images
+          cd .github/workflows/pqh-updater/
           mkdir raw
           
       - name: Run card.py
@@ -73,10 +72,14 @@ jobs:
         run: |
           git config user.name $user_name
           git config user.email $user_email
+          
           git add ./public/version
           git add ./public/data.json
           git add ./public/data.min.json
           git add ./public/images
+          git add ./.github/workflows/pqh-updater/database
+          git add ./.github/workflows/pqh-updater/cards
+
           git diff-index --quiet HEAD || git commit -m "[Bot] Data Update" -m '
           ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           This is an automated process. Issues may or may not have occured.'
