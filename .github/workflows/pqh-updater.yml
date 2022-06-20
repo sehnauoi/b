@@ -55,7 +55,7 @@ jobs:
           pip install bs4
           
       - name: Download Character Cards
-        if: ${{ steps.update.outputs.success == 'true' }}
+#         if: ${{ steps.update.outputs.success == 'true' }}
         run: |
           cd public
           cd images
