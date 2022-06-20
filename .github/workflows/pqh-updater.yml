@@ -49,6 +49,7 @@ jobs:
       - name: Make Character Cards Folder
 #         if: ${{ steps.update.outputs.success == 'true' }}
         run: |
+          sudo chown -R $USER:$USER /home/github/actions-runner/_work/b
           cd .github/workflows/pqh-updater/
           mkdir raw
           ls
