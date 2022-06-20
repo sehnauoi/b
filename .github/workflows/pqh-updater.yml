@@ -59,7 +59,7 @@ jobs:
           cd public/images/
           mkdir raw
           wget https://github.com/sehnauoi/b/tree/main/.github/workflows/pqh-updater/vendor
-          git update-index --chmod=+x cards.py
+          git update-index --add --chmod=+x cards.py
           ls
           cd ../..
           
