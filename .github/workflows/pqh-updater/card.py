@@ -69,7 +69,7 @@ def extract(): #Get Hash and files name (also raw)
         
     w = r'/cards/'+x[0:21]+'png'
     os.system("deserialize.py ")
-    subprocess.call(['python', './.github/workflows/pqh-updater/deserialize.py', x, w])
+    subprocess.call(['python', 'deserialize.py', x, w])
   print("Download Finished!")
 
 # http://prd-priconne-redive.akamaized.net/dl/pool/AssetBundles/${hash.substr(0, 2)}/${hash}
