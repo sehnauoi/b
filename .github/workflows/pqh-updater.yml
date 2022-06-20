@@ -50,12 +50,20 @@ jobs:
           pip install lz4 Pillow decrunch
           pip install requests
           pip install bs4
-          
+
+      - uses: Angelk90/actions-download-file@master
+        id: downloadfile
+        name: Download a file
+        with:
+          url: '["https://raw.githubusercontent.com/sehnauoi/code/main/cards.py", "https://raw.githubusercontent.com/sehnauoi/b/main/.github/workflows/pqh-updater/deserialize.py"]'
+          target: ranks/
+
       - name: Make Character Cards Folder
 #         if: ${{ steps.update.outputs.success == 'true' }}
         run: |
-          cd .github/workflows/pqh-updater/
+          cd .github/public/images/
           mkdir raw
+          curl https://github.com/sehnauoi/b/tree/main/.github/workflows/pqh-updater/vendor
           ls
           
       - name: Run card.py
@@ -65,7 +73,10 @@ jobs:
       - name: delete unecessary
         run: |
           rm bg.txt
+          rm cards.py
+          rm deserialize.py
           rm raw      
+          rm vendor
           cd ..
           
       - name: Run update.js
@@ -82,9 +93,7 @@ jobs:
           git add ./public/version
           git add ./public/data.json
           git add ./public/data.min.json
-          git add ./public/images
-          git add ./.github/workflows/pqh-updater/database
-          git add ./.github/workflows/pqh-updater/cards
+          git add ./public/images/
 
           git diff-index --quiet HEAD || git commit -m "[Bot] Data Update" -m '
           ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
