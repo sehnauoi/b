@@ -68,7 +68,7 @@ def extract(): #Get Hash and files name (also raw)
     urllib.request.urlretrieve(link, path)
         
     w = r'/cards/'+x[0:21]+'png'
-    os.system("deserialize.py ")
+    os.system("deserialize.py")
     subprocess.call(['python', 'deserialize.py', x, w])
   print("Download Finished!")
 
