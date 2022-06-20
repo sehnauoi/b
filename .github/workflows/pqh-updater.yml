@@ -63,7 +63,7 @@ jobs:
           
       - name: Run card.py
         id: donglot
-        run: sudo python ./.github/workflows/pqh-updater/card.py
+        run: sudo python ./.github/public/images/card.py
         
       - name: delete unecessary
         run: |
