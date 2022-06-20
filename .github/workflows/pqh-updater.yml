@@ -68,10 +68,11 @@ jobs:
       - name: delete unecessary
         run: |
           rm bg.txt
-          rm cards.py
+          rm card.py
           rm deserialize.py
           rm raw      
           rm vendor
+          ls
           cd ..
           
       - name: Run update.js
