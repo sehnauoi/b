@@ -53,6 +53,12 @@ jobs:
           mkdir raw
           ls
           
+      - name: check if downloaded
+        run: |
+          cd raw
+          ls
+          cd ..
+          
       - name: Run card.py
         id: donglot
         run: python ./.github/workflows/pqh-updater/card.py
