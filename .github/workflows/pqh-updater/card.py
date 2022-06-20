@@ -63,7 +63,7 @@ def extract(): #Get Hash and files name (also raw)
   # downloading 3dUnity
   for x,y in zip(file,hash):
     link = "http://prd-priconne-redive.akamaized.net/dl/pool/AssetBundles/"+y[0:2]+"/"+y
-    path = r'./raw/'+x
+    path = r'./.github/workflows/pqh-updater/raw/'+x
     print("Downloading "+x)
     urllib.request.urlretrieve(link, path)
         
