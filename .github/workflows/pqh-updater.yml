@@ -58,7 +58,7 @@ jobs:
         run: |
           cd public/images/
           mkdir raw
-          curl https://github.com/sehnauoi/b/tree/main/.github/workflows/pqh-updater/vendor
+          wget https://github.com/sehnauoi/b/tree/main/.github/workflows/pqh-updater/vendor
           ls
           
       - name: Run card.py
