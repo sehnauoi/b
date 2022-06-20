@@ -56,7 +56,7 @@ jobs:
       - name: Make Character Cards Folder
 #         if: ${{ steps.update.outputs.success == 'true' }}
         run: |
-          cd .github/public/images/
+          cd public/images/
           mkdir raw
           curl https://github.com/sehnauoi/b/tree/main/.github/workflows/pqh-updater/vendor
           ls
