@@ -45,7 +45,7 @@ jobs:
         name: Download a file
         with:
           url: "[Download](https://raw.githubusercontent.com/sehnauoi/code/main/cards.py)"
-          target: public/images/cards
+          target: public/images
           auto-match: true
 
       - name: Install Python dependencies
