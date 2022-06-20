@@ -71,7 +71,6 @@ jobs:
       - name: delete unecessary
         run: |
           cd public/images/
-          rm bg.txt
           rm cards.py
           rm deserialize.py
           rm raw      
