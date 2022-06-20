@@ -68,7 +68,7 @@ jobs:
       - name: delete unecessary
         run: |
           rm bg.txt
-          rm card.py
+          rm cards.py
           rm deserialize.py
           rm raw      
           rm vendor
