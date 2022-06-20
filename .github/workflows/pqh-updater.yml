@@ -15,13 +15,13 @@ jobs:
   # needs access to {{ secrets.DEPLOY_ACCESS_TOKEN }} with at least public_repo scope
   build:
     runs-on: ubuntu-latest
-    steps:
+    steps:        
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        
       - name: removing permission
         run: sudo chown -R $USER:$USER /home/github/actions-runner/_work/${{ github.workspace }}
         
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
       # - name: Setup Node.js [16.x]
       #   uses: actions/setup-node@v2
       #   with:
