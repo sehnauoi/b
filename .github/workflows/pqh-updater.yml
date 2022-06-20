@@ -53,11 +53,7 @@ jobs:
           pip install lz4 Pillow decrunch
           pip install requests
           pip install bs4
-            
-      - name: Run update.js
-        id: update
-        run: node ./.github/workflows/pqh-updater/update.js
-        
+          
       - name: Download Character Cards
         if: ${{ steps.update.outputs.success == 'true' }}
         run: |
@@ -65,6 +61,10 @@ jobs:
           cd images
           cd cards
           python cards.py
+          
+      - name: Run update.js
+        id: update
+        run: node ./.github/workflows/pqh-updater/update.js
 
       # assuming there are new changes
       - name: Update images on Git
