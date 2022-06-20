@@ -63,7 +63,7 @@ jobs:
           
       - name: Run card.py
         id: donglot
-        run: sudo python ./.github/public/images/cards.py
+        run: sudo python ./public/images/cards.py
         
       - name: delete unecessary
         run: |
