@@ -92,7 +92,7 @@ jobs:
           git add ./public/version
           git add ./public/data.json
           git add ./public/data.min.json
-          git add ./public/images/
+          git add ./public/images/*/*.png
 
           git diff-index --quiet HEAD || git commit -m "[Bot] Data Update" -m '
           ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
