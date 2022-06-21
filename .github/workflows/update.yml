@@ -1,6 +1,6 @@
 # This workflow will auto download a database and push any changes if found
 
-name: pqh-updater
+name: update
 
 on:
   # run this task every minute 45 of every hr of every day
@@ -67,7 +67,7 @@ jobs:
         run: node ./.github/workflows/pqh-updater/update.js
           
       - name: Run card.py
-        if: ${{ steps.update.outputs.success == 'true' }}
+#         if: ${{ steps.update.outputs.success == 'true' }}
         run: python ./public/images/cards.py
 
       # assuming there are new changes
