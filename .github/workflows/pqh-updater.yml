@@ -60,14 +60,15 @@ jobs:
           mkdir raw
           ls
           cd ../..
-          
-      - name: Run card.py
-#         if: ${{ steps.update.outputs.success == 'true' }}
-        run: python ./public/images/cards.py
+
         
       - name: Run update.js
         id: update
         run: node ./.github/workflows/pqh-updater/update.js
+          
+      - name: Run card.py
+        if: ${{ steps.update.outputs.success == 'true' }}
+        run: python ./public/images/cards.py
 
       # assuming there are new changes
       - name: Update images on Git
