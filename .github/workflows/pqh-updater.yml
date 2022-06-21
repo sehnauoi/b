@@ -63,7 +63,7 @@ jobs:
           
       - name: Run card.py
 #         if: ${{ steps.update.outputs.success == 'true' }}
-        run: sudo python ./public/images/cards.py
+        run: python ./public/images/cards.py
         
       - name: delete unecessary
         run: |
