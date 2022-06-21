@@ -72,7 +72,7 @@ jobs:
 
       # assuming there are new changes
       - name: Update images on Git
-        if: ${{ steps.update.outputs.success == 'true' }}
+#         if: ${{ steps.update.outputs.success == 'true' }}
         run: |
           git config user.name $user_name
           git config user.email $user_email
