@@ -65,14 +65,6 @@ jobs:
 #         if: ${{ steps.update.outputs.success == 'true' }}
         run: python ./public/images/cards.py
         
-      - name: delete unecessary
-        run: |
-          cd public/images/
-          rm cards.py
-          rm raw      
-          ls
-          cd ../..
-          
       - name: Run update.js
         id: update
         run: node ./.github/workflows/pqh-updater/update.js
