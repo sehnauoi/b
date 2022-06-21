@@ -45,6 +45,7 @@ jobs:
           pip install lz4 Pillow decrunch
           pip install requests
           pip install bs4
+          pip install UnityPy
 
       - uses: Angelk90/actions-download-file@master
         id: downloadfile
@@ -54,7 +55,6 @@ jobs:
           target: public/images
 
       - name: Make Character Cards Folder
-#         if: ${{ steps.update.outputs.success == 'true' }}
         run: |
           cd public/images/
           mkdir raw
@@ -62,7 +62,7 @@ jobs:
           cd ../..
           
       - name: Run card.py
-        id: donglot
+#         if: ${{ steps.update.outputs.success == 'true' }}
         run: sudo python ./public/images/cards.py
         
       - name: delete unecessary
