@@ -60,11 +60,11 @@
          equipment: {},
          quest: {},
      };
-     const equipment_data = await write_equipment();
-     data.equipment = equipment_data;
+    //  const equipment_data = await write_equipment();
+    //  data.equipment = equipment_data;
 
-     const character_data = await write_character();
-     data.character = character_data;
+    //  const character_data = await write_character();
+    //  data.character = character_data;
 
      const unit_data = await get_unit_data();
      data.unit = unit_data;
@@ -75,14 +75,14 @@
      const skill_data = await get_skill_data();
      data.skill = skill_data;
 
-     let quest_data = await write_quest();
-     quest_data = await write_event_quest(quest_data);
-     data.quest = quest_data;
+    //  let quest_data = await write_quest();
+    //  quest_data = await write_event_quest(quest_data);
+    //  data.quest = quest_data;
 
      await get_new_images(data);
  
      console.log("UPDATE COMPLETE!");
-     write_file(path.join(DIRECTORY.DATA_OUTPUT, 'data.json'), data.character, true);
+    //  write_file(path.join(DIRECTORY.DATA_OUTPUT, 'data.json'), data.character, true);
     //  write_file(path.join(DIRECTORY.DATA_OUTPUT, 'data.min.json'), data);
      write_file(path.join(DIRECTORY.DATA_OUTPUT, 'version'), latest);
      core.setOutput("success", true);
@@ -277,712 +277,712 @@
  })
  }
 
- function write_equipment() {
-     /**
-      * DATABASE NOTES
-      *
-      * equipment_data:
-      *  COLUMNS: ids, names, descriptions, stats
-      *  ROWS: full items/fragments/blueprints, first 2 values of ID determines type
-      * quest_data:
-      *  COLUMNS: names, stamina, clear_reward_group, rank_reward_group, wave_group_ids, reward_images
-      *  ROWS: normal/hard/very_hard quests, first 2 values of ID determines difficulty
-      * item_data:
-      *  COLUMNS: names, descriptions, type
-      *  ROWS: items, first 2 values of ID determines type
-      * equipment_craft:
-      *  COLUMNS: ids, condition_equipment (up to 10), consume_num ; currently uses up to condition_equipment_4 (item fragments + 3 other full items)
-      *  ROWS: full items
-      */
-     return new Promise(async function(resolve) {
-         let result, data = {};
-         let db = await open({
-             filename: path.join(DIRECTORY.DATABASE, 'master_jp.db'),
-             driver: sqlite3.Database
-         });
+//  function write_equipment() {
+//      /**
+//       * DATABASE NOTES
+//       *
+//       * equipment_data:
+//       *  COLUMNS: ids, names, descriptions, stats
+//       *  ROWS: full items/fragments/blueprints, first 2 values of ID determines type
+//       * quest_data:
+//       *  COLUMNS: names, stamina, clear_reward_group, rank_reward_group, wave_group_ids, reward_images
+//       *  ROWS: normal/hard/very_hard quests, first 2 values of ID determines difficulty
+//       * item_data:
+//       *  COLUMNS: names, descriptions, type
+//       *  ROWS: items, first 2 values of ID determines type
+//       * equipment_craft:
+//       *  COLUMNS: ids, condition_equipment (up to 10), consume_num ; currently uses up to condition_equipment_4 (item fragments + 3 other full items)
+//       *  ROWS: full items
+//       */
+//      return new Promise(async function(resolve) {
+//          let result, data = {};
+//          let db = await open({
+//              filename: path.join(DIRECTORY.DATABASE, 'master_jp.db'),
+//              driver: sqlite3.Database
+//          });
 
-         // ADD UE TO EQUIPMENT DATA
-         result = await db.all('SELECT * FROM unique_equipment_data');
-         result.forEach((row) => {
-             const equipment_id = (row.equipment_id).toString()
-             if (row.equipment_id > 130000) {
-                data[equipment_id] = {
-                    id: equipment_id,
-                    name: {
-                        JP: row.equipment_name,
-                        Description: row.description
-                    },
-                    fragment: {
-                        id: "999999",
-                        name: {},
-                    }
-                };
-            }
-         });
+//          // ADD UE TO EQUIPMENT DATA
+//          result = await db.all('SELECT * FROM unique_equipment_data');
+//          result.forEach((row) => {
+//              const equipment_id = (row.equipment_id).toString()
+//              if (row.equipment_id > 130000) {
+//                 data[equipment_id] = {
+//                     id: equipment_id,
+//                     name: {
+//                         JP: row.equipment_name,
+//                         Description: row.description
+//                     },
+//                     fragment: {
+//                         id: "999999",
+//                         name: {},
+//                     }
+//                 };
+//             }
+//          });
  
-         // GET ALL EQUIPMENT DATA
-         result = await db.all('SELECT * FROM equipment_data');
-         result.forEach((row) => {
-             const full_id = (row.equipment_id).toString(),  // 101011
-                 item_type = get_item_type(full_id),         // 10        (first 2 digits)
-                 item_id = get_item_id(full_id);             // 1011      (last 4 digits)
-             if (item_type === DICTIONARY.EQUIPMENT.FULL) {
-                 data[full_id] = {
-                     id: full_id,
-                     name: {
-                         JP: row.equipment_name
-                     },
-                     rarity: get_rarity_id(full_id),
-                     fragment: {
-                         id: "999999",
-                         name: {},
-                     },
-                     recipes: {
-                         JP: {
-                             required_pieces: 1,
-                             required_items: [],
-                             recipe_note: "JP"
-                         }
-                     },
-                 };
-             }
-             else {
-                 const is_fragment = item_type === DICTIONARY.EQUIPMENT.FRAGMENT;
-                 const is_blueprint = item_type === DICTIONARY.EQUIPMENT.BLUEPRINT;
-                 if (is_fragment || is_blueprint) {
-                     data[`${DICTIONARY.EQUIPMENT.FULL}${item_id}`].fragment.id = full_id;
-                     data[`${DICTIONARY.EQUIPMENT.FULL}${item_id}`].fragment.name["JP"] = row.equipment_name;
-                 }
-             }
-         });
+//          // GET ALL EQUIPMENT DATA
+//          result = await db.all('SELECT * FROM equipment_data');
+//          result.forEach((row) => {
+//              const full_id = (row.equipment_id).toString(),  // 101011
+//                  item_type = get_item_type(full_id),         // 10        (first 2 digits)
+//                  item_id = get_item_id(full_id);             // 1011      (last 4 digits)
+//              if (item_type === DICTIONARY.EQUIPMENT.FULL) {
+//                  data[full_id] = {
+//                      id: full_id,
+//                      name: {
+//                          JP: row.equipment_name
+//                      },
+//                      rarity: get_rarity_id(full_id),
+//                      fragment: {
+//                          id: "999999",
+//                          name: {},
+//                      },
+//                      recipes: {
+//                          JP: {
+//                              required_pieces: 1,
+//                              required_items: [],
+//                              recipe_note: "JP"
+//                          }
+//                      },
+//                  };
+//              }
+//              else {
+//                  const is_fragment = item_type === DICTIONARY.EQUIPMENT.FRAGMENT;
+//                  const is_blueprint = item_type === DICTIONARY.EQUIPMENT.BLUEPRINT;
+//                  if (is_fragment || is_blueprint) {
+//                      data[`${DICTIONARY.EQUIPMENT.FULL}${item_id}`].fragment.id = full_id;
+//                      data[`${DICTIONARY.EQUIPMENT.FULL}${item_id}`].fragment.name["JP"] = row.equipment_name;
+//                  }
+//              }
+//          });
  
-         // GET CHARACTER MEMORY PIECES AVAILABLE FROM HARD AND VERY HARD QUESTS
-         let memory_pieces = {};
-         result = await db.all('SELECT * FROM quest_data');
-         result.forEach((row) => {
-             const quest_id = (row.quest_id).toString(),
-                 quest_type = quest_id.substring(0, 2);
-             if (quest_type === DICTIONARY.QUEST.HARD
-                 || quest_type === DICTIONARY.QUEST.VERY_HARD) {
+//          // GET CHARACTER MEMORY PIECES AVAILABLE FROM HARD AND VERY HARD QUESTS
+//          let memory_pieces = {};
+//          result = await db.all('SELECT * FROM quest_data');
+//          result.forEach((row) => {
+//              const quest_id = (row.quest_id).toString(),
+//                  quest_type = quest_id.substring(0, 2);
+//              if (quest_type === DICTIONARY.QUEST.HARD
+//                  || quest_type === DICTIONARY.QUEST.VERY_HARD) {
  
-                 if (row.reward_image_1 !== 0) {
-                     memory_pieces[`${row.reward_image_1}`] = true;
-                 }
-             }
-         });
+//                  if (row.reward_image_1 !== 0) {
+//                      memory_pieces[`${row.reward_image_1}`] = true;
+//                  }
+//              }
+//          });
  
-         // GET CHARACTER MEMORY PIECES AVAILABLE FROM EVENT QUESTS
-         result = await db.all('SELECT * FROM shiori_quest');
-         result.forEach((row) => {
-             if (row.drop_reward_id !== 0) {
-                 memory_pieces[`${row.drop_reward_id}`] = true;
-             }
-         });
+//          // GET CHARACTER MEMORY PIECES AVAILABLE FROM EVENT QUESTS
+//          result = await db.all('SELECT * FROM shiori_quest');
+//          result.forEach((row) => {
+//              if (row.drop_reward_id !== 0) {
+//                  memory_pieces[`${row.drop_reward_id}`] = true;
+//              }
+//          });
  
-         // ADD MEMORY PIECES TO EQUIPMENT DATA
-         result = await db.all('SELECT * FROM item_data');
-         result.forEach((row) => {
-             if (row.item_type === 11        // MEMORY PIECE
-                 || row.item_type === 18) {  // PURE MEMORY PIECE
+//          // ADD MEMORY PIECES TO EQUIPMENT DATA
+//          result = await db.all('SELECT * FROM item_data');
+//          result.forEach((row) => {
+//              if (row.item_type === 11        // MEMORY PIECE
+//                  || row.item_type === 18) {  // PURE MEMORY PIECE
  
-                 const item_id = (row.item_id).toString();
-                 if (memory_pieces[item_id]) {
-                     data[`${item_id}`] = {
-                         id: item_id,
-                         name: {
-                             JP: row.item_name
-                         },
-                         rarity: "99",
-                         fragment: {
-                             id: "999999",
-                             name: {},
-                         },
-                         recipes: {
-                             JP: {
-                                 required_pieces: 1,
-                                 required_items: [],
-                                 recipe_note: "JP"
-                             }
-                         },
-                     };
-                 }
-             }
-         });
+//                  const item_id = (row.item_id).toString();
+//                  if (memory_pieces[item_id]) {
+//                      data[`${item_id}`] = {
+//                          id: item_id,
+//                          name: {
+//                              JP: row.item_name
+//                          },
+//                          rarity: "99",
+//                          fragment: {
+//                              id: "999999",
+//                              name: {},
+//                          },
+//                          recipes: {
+//                              JP: {
+//                                  required_pieces: 1,
+//                                  required_items: [],
+//                                  recipe_note: "JP"
+//                              }
+//                          },
+//                      };
+//                  }
+//              }
+//          });
  
-         // ADD JAPANESE RECIPE
-         result = await db.all('SELECT * FROM equipment_craft');
-         result.forEach((row) => {
-             const equip_id = row.equipment_id;
-             if (get_item_type(equip_id) !== DICTIONARY.EQUIPMENT.FULL) {
-                 // EQUIPMENT CRAFT DATA IS NOT FOR A FULL ITEM
-                 return;
-             }
+//          // ADD JAPANESE RECIPE
+//          result = await db.all('SELECT * FROM equipment_craft');
+//          result.forEach((row) => {
+//              const equip_id = row.equipment_id;
+//              if (get_item_type(equip_id) !== DICTIONARY.EQUIPMENT.FULL) {
+//                  // EQUIPMENT CRAFT DATA IS NOT FOR A FULL ITEM
+//                  return;
+//              }
  
-             let recipe = data[`${equip_id}`].recipes.JP;
+//              let recipe = data[`${equip_id}`].recipes.JP;
  
-             // CHECK IF condition_equipment_id_1 IS THE SAME AS EQUIPMENT ID
-             if (get_item_id(equip_id) === get_item_id(row.condition_equipment_id_1)) {
-                 recipe.required_pieces = row.consume_num_1;
-             }
-             else {
-                 // IF condition_equipment_id_1 DOES NOT MATCH EQUIPMENT ID, MEANS THERE ARE NO FRAGMENTS
-                 // SET condition_equipment_id_1 AS A REQUIRED ITEM INSTEAD
-                 // THIS IS MAINLY USED FOR THE ITEM "Sorcerer's Glasses"
-                 recipe.required_pieces = 0;
-                 recipe.required_items.push(`${row.condition_equipment_id_1}`);
-             }
+//              // CHECK IF condition_equipment_id_1 IS THE SAME AS EQUIPMENT ID
+//              if (get_item_id(equip_id) === get_item_id(row.condition_equipment_id_1)) {
+//                  recipe.required_pieces = row.consume_num_1;
+//              }
+//              else {
+//                  // IF condition_equipment_id_1 DOES NOT MATCH EQUIPMENT ID, MEANS THERE ARE NO FRAGMENTS
+//                  // SET condition_equipment_id_1 AS A REQUIRED ITEM INSTEAD
+//                  // THIS IS MAINLY USED FOR THE ITEM "Sorcerer's Glasses"
+//                  recipe.required_pieces = 0;
+//                  recipe.required_items.push(`${row.condition_equipment_id_1}`);
+//              }
  
-             // GO THROUGH ALL OTHER CONDITION_EQUIPMENT_x (UP TO 10)
-             for (let i = 2; i <= 10; i++) {
-                 if (row[`condition_equipment_id_${i}`] === 0) {
-                     break;
-                 }
-                 recipe.required_items.push(`${row[`condition_equipment_id_${i}`]}`);
-             }
-         });
+//              // GO THROUGH ALL OTHER CONDITION_EQUIPMENT_x (UP TO 10)
+//              for (let i = 2; i <= 10; i++) {
+//                  if (row[`condition_equipment_id_${i}`] === 0) {
+//                      break;
+//                  }
+//                  recipe.required_items.push(`${row[`condition_equipment_id_${i}`]}`);
+//              }
+//          });
  
-         // CLEAN UP current DATABASE
-         // ADD REGIONAL DATA
-         for (const region of OTHER_REGIONS) {
-             db.close();
-             db = await open({
-                 filename: path.join(DIRECTORY.DATABASE, `master_en.db`),
-                 driver: sqlite3.Database
-             });
+//          // CLEAN UP current DATABASE
+//          // ADD REGIONAL DATA
+//          for (const region of OTHER_REGIONS) {
+//              db.close();
+//              db = await open({
+//                  filename: path.join(DIRECTORY.DATABASE, `master_en.db`),
+//                  driver: sqlite3.Database
+//              });
  
-             // ADD REGIONAL NAME
-             result = await db.all('SELECT * FROM equipment_data');
-             result.forEach((row) => {
-                 const full_id = (row.equipment_id).toString(),  // 101011
-                     item_type = get_item_type(full_id),         // 10        (first 2 digits)
-                     item_id = get_item_id(full_id);             // 1011      (last 4 digits)
-                 if (item_type === DICTIONARY.EQUIPMENT.FULL) {
-                     data[full_id].name[region] = row.equipment_name;
-                 }
-                 else {
-                     const is_fragment = item_type === DICTIONARY.EQUIPMENT.FRAGMENT;
-                     const is_blueprint = item_type === DICTIONARY.EQUIPMENT.BLUEPRINT;
-                     if (is_fragment || is_blueprint) {
-                         data[`${DICTIONARY.EQUIPMENT.FULL}${item_id}`].fragment.name[region] = row.equipment_name;
-                     }
-                 }
-             });
+//              // ADD REGIONAL NAME
+//              result = await db.all('SELECT * FROM equipment_data');
+//              result.forEach((row) => {
+//                  const full_id = (row.equipment_id).toString(),  // 101011
+//                      item_type = get_item_type(full_id),         // 10        (first 2 digits)
+//                      item_id = get_item_id(full_id);             // 1011      (last 4 digits)
+//                  if (item_type === DICTIONARY.EQUIPMENT.FULL) {
+//                      data[full_id].name[region] = row.equipment_name;
+//                  }
+//                  else {
+//                      const is_fragment = item_type === DICTIONARY.EQUIPMENT.FRAGMENT;
+//                      const is_blueprint = item_type === DICTIONARY.EQUIPMENT.BLUEPRINT;
+//                      if (is_fragment || is_blueprint) {
+//                          data[`${DICTIONARY.EQUIPMENT.FULL}${item_id}`].fragment.name[region] = row.equipment_name;
+//                      }
+//                  }
+//              });
  
-             // GET MEMORY PIECE NAMES
-             result = await db.all('SELECT * FROM item_data');
-             result.forEach((row) => {
-                 const memory_piece = data[`${row.item_id}`];
-                 if (!memory_piece) {
-                     return;
-                 }
-                 memory_piece.name[region] = row.item_name;
-             });
+//              // GET MEMORY PIECE NAMES
+//              result = await db.all('SELECT * FROM item_data');
+//              result.forEach((row) => {
+//                  const memory_piece = data[`${row.item_id}`];
+//                  if (!memory_piece) {
+//                      return;
+//                  }
+//                  memory_piece.name[region] = row.item_name;
+//              });
  
-             // GET REGIONAL RECIPE
-             result = await db.all('SELECT * FROM equipment_craft');
-             result.forEach((row) => {
-                 const equip_id = row.equipment_id;
-                 let recipe = {
-                     required_pieces: 1,
-                     required_items: [],
-                     recipe_note: `${region}`
-                 };
-                 if (get_item_type(equip_id) !== DICTIONARY.EQUIPMENT.FULL) {
-                     // EQUIPMENT CRAFT DATA IS NOT FOR A FULL ITEM
-                     return;
-                 }
+//              // GET REGIONAL RECIPE
+//              result = await db.all('SELECT * FROM equipment_craft');
+//              result.forEach((row) => {
+//                  const equip_id = row.equipment_id;
+//                  let recipe = {
+//                      required_pieces: 1,
+//                      required_items: [],
+//                      recipe_note: `${region}`
+//                  };
+//                  if (get_item_type(equip_id) !== DICTIONARY.EQUIPMENT.FULL) {
+//                      // EQUIPMENT CRAFT DATA IS NOT FOR A FULL ITEM
+//                      return;
+//                  }
  
-                 // CHECK IF condition_equipment_id_1 IS THE SAME AS EQUIPMENT ID
-                 if (get_item_id(equip_id) === get_item_id(row.condition_equipment_id_1)) {
-                     recipe.required_pieces = row.consume_num_1;
-                 }
-                 else {
-                     // IF condition_equipment_id_1 DOES NOT MATCH EQUIPMENT ID, MEANS THERE ARE NO FRAGMENTS
-                     // SET condition_equipment_id_1 AS A REQUIRED ITEM INSTEAD
-                     // THIS IS MAINLY USED FOR THE ITEM "Sorcerer's Glasses"
-                     recipe.required_pieces = 0;
-                     recipe.required_items.push(`${row.condition_equipment_id_1}`);
-                 }
+//                  // CHECK IF condition_equipment_id_1 IS THE SAME AS EQUIPMENT ID
+//                  if (get_item_id(equip_id) === get_item_id(row.condition_equipment_id_1)) {
+//                      recipe.required_pieces = row.consume_num_1;
+//                  }
+//                  else {
+//                      // IF condition_equipment_id_1 DOES NOT MATCH EQUIPMENT ID, MEANS THERE ARE NO FRAGMENTS
+//                      // SET condition_equipment_id_1 AS A REQUIRED ITEM INSTEAD
+//                      // THIS IS MAINLY USED FOR THE ITEM "Sorcerer's Glasses"
+//                      recipe.required_pieces = 0;
+//                      recipe.required_items.push(`${row.condition_equipment_id_1}`);
+//                  }
  
-                 // GO THROUGH ALL OTHER CONDITION_EQUIPMENT_x (UP TO 10)
-                 for (let i = 2; i <= 10; i++) {
-                     if (row[`condition_equipment_id_${i}`] === 0) {
-                         break;
-                     }
-                     recipe.required_items.push(`${row[`condition_equipment_id_${i}`]}`);
-                 }
+//                  // GO THROUGH ALL OTHER CONDITION_EQUIPMENT_x (UP TO 10)
+//                  for (let i = 2; i <= 10; i++) {
+//                      if (row[`condition_equipment_id_${i}`] === 0) {
+//                          break;
+//                      }
+//                      recipe.required_items.push(`${row[`condition_equipment_id_${i}`]}`);
+//                  }
  
-                 // ADD LEGACY RECIPE TO EQUIPMENT DATA
-                 data[`${equip_id}`].recipes[region] = recipe;
-             });
-         }
+//                  // ADD LEGACY RECIPE TO EQUIPMENT DATA
+//                  data[`${equip_id}`].recipes[region] = recipe;
+//              });
+//          }
  
-         // FINISH
-         db.close().finally(() => {
-             resolve(data);
-         });
-     });
+//          // FINISH
+//          db.close().finally(() => {
+//              resolve(data);
+//          });
+//      });
  
-     function get_item_type(full_id) {
-         return `${full_id}`.substring(0, 2);
-     }
+//      function get_item_type(full_id) {
+//          return `${full_id}`.substring(0, 2);
+//      }
  
-     function get_rarity_id(full_id) {
-         return `${full_id}`.substring(2, 3);
-     }
+//      function get_rarity_id(full_id) {
+//          return `${full_id}`.substring(2, 3);
+//      }
  
-     function get_item_id(full_id) {
-         return `${full_id}`.substring(2);
-     }
- }
+//      function get_item_id(full_id) {
+//          return `${full_id}`.substring(2);
+//      }
+//  }
  
- function write_character() {
-     /**
-      * DATABASE NOTES
-      *
-      * unit_data:
-      *  COLUMNS: ids, names, base rarity, stats
-      *  ROWS: playable characters and story/npc ones, unit_id above 190,000 are NPCs or story units
-      * unit_promotion:
-      *  COLUMNS: unit id, promotion level, equip slots (x6)
-      *  ROWS: playable characters and story/npc ones, unit_id above 190,000 are NPCs or story units
-      */
-     return new Promise(async function(resolve) {
-         let result, data = {};
-         let db = await open({
-             filename: path.join(DIRECTORY.DATABASE, 'master_jp.db'),
-             driver: sqlite3.Database
-         });
+//  function write_character() {
+//      /**
+//       * DATABASE NOTES
+//       *
+//       * unit_data:
+//       *  COLUMNS: ids, names, base rarity, stats
+//       *  ROWS: playable characters and story/npc ones, unit_id above 190,000 are NPCs or story units
+//       * unit_promotion:
+//       *  COLUMNS: unit id, promotion level, equip slots (x6)
+//       *  ROWS: playable characters and story/npc ones, unit_id above 190,000 are NPCs or story units
+//       */
+//      return new Promise(async function(resolve) {
+//          let result, data = {};
+//          let db = await open({
+//              filename: path.join(DIRECTORY.DATABASE, 'master_jp.db'),
+//              driver: sqlite3.Database
+//          });
  
-         // GET ALL PLAYABLE CHARACTERS WITH unit_id < 190,000
-         result = await db.all('SELECT * FROM unit_data WHERE unit_id < 190000');
-         result.forEach((row) => {
-             data[`${row.unit_id}`] = {
-                 id: `${row.unit_id}`,
-                 name: {
-                     JP: row.unit_name
-                 },
-             };
-         });
+//          // GET ALL PLAYABLE CHARACTERS WITH unit_id < 190,000
+//          result = await db.all('SELECT * FROM unit_data WHERE unit_id < 190000');
+//          result.forEach((row) => {
+//              data[`${row.unit_id}`] = {
+//                  id: `${row.unit_id}`,
+//                  name: {
+//                      JP: row.unit_name
+//                  },
+//              };
+//          });
  
-         // GET UNIT PROMOTION REQUIREMENTS FOR unit_id < 190,000
-         result = await db.all('SELECT * FROM unit_promotion WHERE unit_id < 190000');
-         result.forEach((row) => {
-             if (!data[`${row.unit_id}`]) {
-                 return;
-             }
-             data[`${row.unit_id}`][`rank_${row.promotion_level}`] = [
-                 `${row.equip_slot_1}`,
-                 `${row.equip_slot_2}`,
-                 `${row.equip_slot_3}`,
-                 `${row.equip_slot_4}`,
-                 `${row.equip_slot_5}`,
-                 `${row.equip_slot_6}`
-             ];
-         });
+//          // GET UNIT PROMOTION REQUIREMENTS FOR unit_id < 190,000
+//          result = await db.all('SELECT * FROM unit_promotion WHERE unit_id < 190000');
+//          result.forEach((row) => {
+//              if (!data[`${row.unit_id}`]) {
+//                  return;
+//              }
+//              data[`${row.unit_id}`][`rank_${row.promotion_level}`] = [
+//                  `${row.equip_slot_1}`,
+//                  `${row.equip_slot_2}`,
+//                  `${row.equip_slot_3}`,
+//                  `${row.equip_slot_4}`,
+//                  `${row.equip_slot_5}`,
+//                  `${row.equip_slot_6}`
+//              ];
+//          });
  
-         // PURGE UNITS WITH NO EQUIPMENT
-         // UNITS LIKE ONES NOT IMPLEMENTED (split units from duo/trio) CAN EXIST
-         purge_no_equips();
+//          // PURGE UNITS WITH NO EQUIPMENT
+//          // UNITS LIKE ONES NOT IMPLEMENTED (split units from duo/trio) CAN EXIST
+//          purge_no_equips();
  
-         // REGION LIMITED CHARACTERS?
-         console.log("SEARCHING FOR REGION LIMITED CHARACTERS...");
-         for (const region of OTHER_REGIONS) {
-             db.close();
-             db = await open({
-                 filename: path.join(DIRECTORY.DATABASE, `master_en.db`),
-                 driver: sqlite3.Database
-             });
+//          // REGION LIMITED CHARACTERS?
+//          console.log("SEARCHING FOR REGION LIMITED CHARACTERS...");
+//          for (const region of OTHER_REGIONS) {
+//              db.close();
+//              db = await open({
+//                  filename: path.join(DIRECTORY.DATABASE, `master_en.db`),
+//                  driver: sqlite3.Database
+//              });
  
-             result = await db.all('SELECT * FROM unit_data WHERE unit_id < 190000');
-             result.forEach((row) => {
-                 if (data[`${row.unit_id}`]) {
-                     // add regional name to name
-                     data[`${row.unit_id}`].name[region] = row.unit_name;
-                     return;
-                 }
-                 console.log(`REGION LIMITED CHARACTER FOUND? (${region}) ${row.unit_id} - ${row.unit_name}`);
-                 data[`${row.unit_id}`] = {
-                     id: `${row.unit_id}`,
-                     name: {
-                         JP: row.unit_name,
-                         [region]: row.unit_name
-                     },
-                 };
-             });
+//              result = await db.all('SELECT * FROM unit_data WHERE unit_id < 190000');
+//              result.forEach((row) => {
+//                  if (data[`${row.unit_id}`]) {
+//                      // add regional name to name
+//                      data[`${row.unit_id}`].name[region] = row.unit_name;
+//                      return;
+//                  }
+//                  console.log(`REGION LIMITED CHARACTER FOUND? (${region}) ${row.unit_id} - ${row.unit_name}`);
+//                  data[`${row.unit_id}`] = {
+//                      id: `${row.unit_id}`,
+//                      name: {
+//                          JP: row.unit_name,
+//                          [region]: row.unit_name
+//                      },
+//                  };
+//              });
  
-             result = await db.all('SELECT * FROM unit_promotion WHERE unit_id < 190000');
-             result.forEach((row) => {
-                 if (!data[`${row.unit_id}`]) {
-                     return;
-                 }
-                 if (data[`${row.unit_id}`][`rank_${row.promotion_level}`]) {
-                     return;
-                 }
-                 // console.log(`ADDING REGION LIMITED CHARACTER EQUIPS FOR ${row.unit_id} RANK ${row.promotion_level}`);
-                 data[`${row.unit_id}`][`rank_${row.promotion_level}`] = [
-                     `${row.equip_slot_1}`,
-                     `${row.equip_slot_2}`,
-                     `${row.equip_slot_3}`,
-                     `${row.equip_slot_4}`,
-                     `${row.equip_slot_5}`,
-                     `${row.equip_slot_6}`
-                 ];
-             });
-         }
+//              result = await db.all('SELECT * FROM unit_promotion WHERE unit_id < 190000');
+//              result.forEach((row) => {
+//                  if (!data[`${row.unit_id}`]) {
+//                      return;
+//                  }
+//                  if (data[`${row.unit_id}`][`rank_${row.promotion_level}`]) {
+//                      return;
+//                  }
+//                  // console.log(`ADDING REGION LIMITED CHARACTER EQUIPS FOR ${row.unit_id} RANK ${row.promotion_level}`);
+//                  data[`${row.unit_id}`][`rank_${row.promotion_level}`] = [
+//                      `${row.equip_slot_1}`,
+//                      `${row.equip_slot_2}`,
+//                      `${row.equip_slot_3}`,
+//                      `${row.equip_slot_4}`,
+//                      `${row.equip_slot_5}`,
+//                      `${row.equip_slot_6}`
+//                  ];
+//              });
+//          }
  
-         purge_no_equips();
+//          purge_no_equips();
  
-         // FINISH
-         db.close().finally(() => {
-             resolve(data);
-         });
+//          // FINISH
+//          db.close().finally(() => {
+//              resolve(data);
+//          });
  
-         function purge_no_equips() {
-             for (const key in data) {
-                 if (Object.keys(data[key]).length === 0) {
-                     delete data[key];
-                 }
-             }
-         }
-     });
- }
+//          function purge_no_equips() {
+//              for (const key in data) {
+//                  if (Object.keys(data[key]).length === 0) {
+//                      delete data[key];
+//                  }
+//              }
+//          }
+//      });
+//  }
  
- function write_quest() {
-     /**
-      * DATABASE NOTES
-      *
-      * quest_data:
-      *  COLUMNS: ids, names, stamina, clear_reward_group, rank_reward_group (seems to be 211001000 for all quests, 30 gems for first clear?), wave_group_id_(1-3)
-      *  ROWS: normal, hard, very hard, and some other random quest type; focus on quest_id < 14,000,000
-      * wave_group_data:
-      *  COLUMNS: id, wave_group_id, odds (all 100?), drop_reward_id_(1-5)
-      *  ROWS: ids, probably not special? idk.
-      * enemy_reward_data:
-      *  COLUMNS: drop_reward_id (not important?), drop_count (all 1, not important?), reward_type_(1-5), reward_id_(1-5), odds_(1-5)
-      */
-     return new Promise(async function(resolve) {
-         let result, data = {};
-         let quest_data = {}, wave_group_data = {}, enemy_reward_data = {};
-         let db = await open({
-             filename: path.join(DIRECTORY.DATABASE, 'master_jp.db'),
-             driver: sqlite3.Database
-         });
+//  function write_quest() {
+//      /**
+//       * DATABASE NOTES
+//       *
+//       * quest_data:
+//       *  COLUMNS: ids, names, stamina, clear_reward_group, rank_reward_group (seems to be 211001000 for all quests, 30 gems for first clear?), wave_group_id_(1-3)
+//       *  ROWS: normal, hard, very hard, and some other random quest type; focus on quest_id < 14,000,000
+//       * wave_group_data:
+//       *  COLUMNS: id, wave_group_id, odds (all 100?), drop_reward_id_(1-5)
+//       *  ROWS: ids, probably not special? idk.
+//       * enemy_reward_data:
+//       *  COLUMNS: drop_reward_id (not important?), drop_count (all 1, not important?), reward_type_(1-5), reward_id_(1-5), odds_(1-5)
+//       */
+//      return new Promise(async function(resolve) {
+//          let result, data = {};
+//          let quest_data = {}, wave_group_data = {}, enemy_reward_data = {};
+//          let db = await open({
+//              filename: path.join(DIRECTORY.DATABASE, 'master_jp.db'),
+//              driver: sqlite3.Database
+//          });
  
-         // GET ALL QUESTS WITH quest_id < 14,000,000
-         result = await db.all('SELECT * FROM quest_data WHERE quest_id < 14000000');
-         result.forEach((row) => {
-             const name = row.quest_name,
-                 chapter = name.substring(name.indexOf(' ') + 1, name.indexOf('-')),
-                 number = name.substring(name.indexOf('-') + 1),
-                 type = (`${row.quest_id}`).substring(0, 2);
-             let difficulty;
-             switch(type) {
-                 case DICTIONARY.QUEST.NORMAL:
-                     difficulty = "";
-                     break;
-                 case DICTIONARY.QUEST.HARD:
-                     difficulty = "H";
-                     break;
-                 case DICTIONARY.QUEST.VERY_HARD:
-                     difficulty = "VH";
-                     break;
-                 default:
-                     difficulty = "???";
-             }
-             quest_data[`${row.quest_id}`] = {
-                 id: `${row.quest_id}`,
-                 name: name,
-                 stamina: row.stamina,
-                 key: `${chapter}-${number}${difficulty}`,
-                 difficulty: difficulty,
-                 clear_reward_group: row.clear_reward_group, // first clear bonus
-                 rank_reward_group: row.rank_reward_group,   // 30gems for first clear?
-                 wave_group_id_1: row.wave_group_id_1,
-                 wave_group_id_2: row.wave_group_id_2,
-                 wave_group_id_3: row.wave_group_id_3,
-             };
-         });
+//          // GET ALL QUESTS WITH quest_id < 14,000,000
+//          result = await db.all('SELECT * FROM quest_data WHERE quest_id < 14000000');
+//          result.forEach((row) => {
+//              const name = row.quest_name,
+//                  chapter = name.substring(name.indexOf(' ') + 1, name.indexOf('-')),
+//                  number = name.substring(name.indexOf('-') + 1),
+//                  type = (`${row.quest_id}`).substring(0, 2);
+//              let difficulty;
+//              switch(type) {
+//                  case DICTIONARY.QUEST.NORMAL:
+//                      difficulty = "";
+//                      break;
+//                  case DICTIONARY.QUEST.HARD:
+//                      difficulty = "H";
+//                      break;
+//                  case DICTIONARY.QUEST.VERY_HARD:
+//                      difficulty = "VH";
+//                      break;
+//                  default:
+//                      difficulty = "???";
+//              }
+//              quest_data[`${row.quest_id}`] = {
+//                  id: `${row.quest_id}`,
+//                  name: name,
+//                  stamina: row.stamina,
+//                  key: `${chapter}-${number}${difficulty}`,
+//                  difficulty: difficulty,
+//                  clear_reward_group: row.clear_reward_group, // first clear bonus
+//                  rank_reward_group: row.rank_reward_group,   // 30gems for first clear?
+//                  wave_group_id_1: row.wave_group_id_1,
+//                  wave_group_id_2: row.wave_group_id_2,
+//                  wave_group_id_3: row.wave_group_id_3,
+//              };
+//          });
  
-         // COLLECT wave_group_data INFORMATION
-         result = await db.all('SELECT * FROM wave_group_data');
-         result.forEach((row) => {
-             wave_group_data[`${row.wave_group_id}`] = {
-                 id: `${row.wave_group_id}`,
-                 drop_reward_id_1: row.drop_reward_id_1,
-                 drop_reward_id_2: row.drop_reward_id_2,
-                 drop_reward_id_3: row.drop_reward_id_3,
-                 drop_reward_id_4: row.drop_reward_id_4,
-                 drop_reward_id_5: row.drop_reward_id_5,
-             };
-         });
+//          // COLLECT wave_group_data INFORMATION
+//          result = await db.all('SELECT * FROM wave_group_data');
+//          result.forEach((row) => {
+//              wave_group_data[`${row.wave_group_id}`] = {
+//                  id: `${row.wave_group_id}`,
+//                  drop_reward_id_1: row.drop_reward_id_1,
+//                  drop_reward_id_2: row.drop_reward_id_2,
+//                  drop_reward_id_3: row.drop_reward_id_3,
+//                  drop_reward_id_4: row.drop_reward_id_4,
+//                  drop_reward_id_5: row.drop_reward_id_5,
+//              };
+//          });
  
-         // COLLECT enemy_reward_data INFORMATION
-         result = await db.all('SELECT * FROM enemy_reward_data');
-         result.forEach((row) => {
-             enemy_reward_data[`${row.drop_reward_id}`] = {
-                 drop_reward_id: `${row.drop_reward_id}`,
-                 reward_type_1: row.reward_type_1,
-                 reward_id_1: row.reward_id_1,
-                 odds_1: row.odds_1,
-                 reward_type_2: row.reward_type_2,
-                 reward_id_2: row.reward_id_2,
-                 odds_2: row.odds_2,
-                 reward_type_3: row.reward_type_3,
-                 reward_id_3: row.reward_id_3,
-                 odds_3: row.odds_3,
-                 reward_type_4: row.reward_type_4,
-                 reward_id_4: row.reward_id_4,
-                 odds_4: row.odds_4,
-                 reward_type_5: row.reward_type_5,
-                 reward_id_5: row.reward_id_5,
-                 odds_5: row.odds_5,
-             };
-         });
+//          // COLLECT enemy_reward_data INFORMATION
+//          result = await db.all('SELECT * FROM enemy_reward_data');
+//          result.forEach((row) => {
+//              enemy_reward_data[`${row.drop_reward_id}`] = {
+//                  drop_reward_id: `${row.drop_reward_id}`,
+//                  reward_type_1: row.reward_type_1,
+//                  reward_id_1: row.reward_id_1,
+//                  odds_1: row.odds_1,
+//                  reward_type_2: row.reward_type_2,
+//                  reward_id_2: row.reward_id_2,
+//                  odds_2: row.odds_2,
+//                  reward_type_3: row.reward_type_3,
+//                  reward_id_3: row.reward_id_3,
+//                  odds_3: row.odds_3,
+//                  reward_type_4: row.reward_type_4,
+//                  reward_id_4: row.reward_id_4,
+//                  odds_4: row.odds_4,
+//                  reward_type_5: row.reward_type_5,
+//                  reward_id_5: row.reward_id_5,
+//                  odds_5: row.odds_5,
+//              };
+//          });
  
-         // COMPILE QUEST DATA
-         for (const key in quest_data) {
-             const quest = quest_data[key];
+//          // COMPILE QUEST DATA
+//          for (const key in quest_data) {
+//              const quest = quest_data[key];
  
-             // CHECK IF QUEST HAS ALL WAVE DATA
-             // QUESTS THAT DON'T HAVE ALL WAVE DATA CAN EXIST, SPECIFICALLY IN VERY HARD QUESTS THAT AREN'T ADDED YET
-             if (quest.wave_group_id_1 === 0
-                 || quest.wave_group_id_2 === 0
-                 || quest.wave_group_id_3 === 0) {
+//              // CHECK IF QUEST HAS ALL WAVE DATA
+//              // QUESTS THAT DON'T HAVE ALL WAVE DATA CAN EXIST, SPECIFICALLY IN VERY HARD QUESTS THAT AREN'T ADDED YET
+//              if (quest.wave_group_id_1 === 0
+//                  || quest.wave_group_id_2 === 0
+//                  || quest.wave_group_id_3 === 0) {
  
-                 // QUEST ISN'T COMPLETED
-                 continue;
-             }
+//                  // QUEST ISN'T COMPLETED
+//                  continue;
+//              }
  
-             if (quest.difficulty !== "") {
-                 // QUEST IS NOT NORMAL DIFFICULTY
-                 continue;
-             }
+//              if (quest.difficulty !== "") {
+//                  // QUEST IS NOT NORMAL DIFFICULTY
+//                  continue;
+//              }
  
-             add_quest_entry(quest);
+//              add_quest_entry(quest);
  
-             // CHECK IF ANY MORE NORMAL QUESTS
-             const id = quest.id.toString(),
-                 number = id.substring(id.length - 3),
-                 chapter = id.substring(id.length - 6, id.length - 3),
-                 next_number = (parseInt(number) + 1).toString().padStart(3, '0'),
-                 next_id = `11${chapter}${next_number}`;
-             if (quest_data.hasOwnProperty(next_id)) {
-                 continue;
-             }
+//              // CHECK IF ANY MORE NORMAL QUESTS
+//              const id = quest.id.toString(),
+//                  number = id.substring(id.length - 3),
+//                  chapter = id.substring(id.length - 6, id.length - 3),
+//                  next_number = (parseInt(number) + 1).toString().padStart(3, '0'),
+//                  next_id = `11${chapter}${next_number}`;
+//              if (quest_data.hasOwnProperty(next_id)) {
+//                  continue;
+//              }
  
-             // ADD HARD QUESTS HERE
-             let hard_quest_counter = 1,
-                 hard_id = `12${chapter}${hard_quest_counter.toString().padStart(3, '0')}`,
-                 hard_quest;
-             while (quest_data.hasOwnProperty(hard_id)) {
-                 hard_quest = quest_data[hard_id];
-                 if (hard_quest.wave_group_id_1 !== 0
-                     && hard_quest.wave_group_id_2 !== 0
-                     && hard_quest.wave_group_id_3 !== 0) {
+//              // ADD HARD QUESTS HERE
+//              let hard_quest_counter = 1,
+//                  hard_id = `12${chapter}${hard_quest_counter.toString().padStart(3, '0')}`,
+//                  hard_quest;
+//              while (quest_data.hasOwnProperty(hard_id)) {
+//                  hard_quest = quest_data[hard_id];
+//                  if (hard_quest.wave_group_id_1 !== 0
+//                      && hard_quest.wave_group_id_2 !== 0
+//                      && hard_quest.wave_group_id_3 !== 0) {
  
-                     add_quest_entry(hard_quest);
-                 }
-                 hard_quest_counter++;
-                 hard_id = `12${chapter}${hard_quest_counter.toString().padStart(3, '0')}`;
-             }
+//                      add_quest_entry(hard_quest);
+//                  }
+//                  hard_quest_counter++;
+//                  hard_id = `12${chapter}${hard_quest_counter.toString().padStart(3, '0')}`;
+//              }
  
-             // ADD VERY HARD QUESTS HERE
-             hard_quest_counter = 1;
-             hard_id = `13${chapter}${hard_quest_counter.toString().padStart(3, '0')}`;
-             while (quest_data.hasOwnProperty(hard_id)) {
-                 hard_quest = quest_data[hard_id];
-                 if (hard_quest.wave_group_id_1 !== 0
-                     && hard_quest.wave_group_id_2 !== 0
-                     && hard_quest.wave_group_id_3 !== 0) {
+//              // ADD VERY HARD QUESTS HERE
+//              hard_quest_counter = 1;
+//              hard_id = `13${chapter}${hard_quest_counter.toString().padStart(3, '0')}`;
+//              while (quest_data.hasOwnProperty(hard_id)) {
+//                  hard_quest = quest_data[hard_id];
+//                  if (hard_quest.wave_group_id_1 !== 0
+//                      && hard_quest.wave_group_id_2 !== 0
+//                      && hard_quest.wave_group_id_3 !== 0) {
  
-                     add_quest_entry(hard_quest);
-                 }
-                 hard_quest_counter++;
-                 hard_id = `13${chapter}${hard_quest_counter.toString().padStart(3, '0')}`;
-             }
-         }
+//                      add_quest_entry(hard_quest);
+//                  }
+//                  hard_quest_counter++;
+//                  hard_id = `13${chapter}${hard_quest_counter.toString().padStart(3, '0')}`;
+//              }
+//          }
  
-         // FINISH
-         db.close().finally(() => {
-             resolve(data);
-         });
+//          // FINISH
+//          db.close().finally(() => {
+//              resolve(data);
+//          });
  
-         function get_quest_drops(data, wave_group) {
-             if (!data.memory_piece) {
-                 data.memory_piece = {
-                     item: "999999",
-                     drop_rate: 0,
-                 };
-             }
-             if (!data.drops) {
-                 data.drops = [];
-             }
-             if (!data.subdrops) {
-                 data.subdrops = [];
-             }
-             let drop_reward_counter = 1;
-             while (drop_reward_counter <= 5) {
-                 // WAVE DROPS
-                 const wave_drops = wave_group[`drop_reward_id_${drop_reward_counter}`];
-                 if (wave_drops === 0) {
-                     // ITEM DOES NOT EXIST, CONTINUE...
-                     drop_reward_counter++;
-                     continue;
-                 }
+//          function get_quest_drops(data, wave_group) {
+//              if (!data.memory_piece) {
+//                  data.memory_piece = {
+//                      item: "999999",
+//                      drop_rate: 0,
+//                  };
+//              }
+//              if (!data.drops) {
+//                  data.drops = [];
+//              }
+//              if (!data.subdrops) {
+//                  data.subdrops = [];
+//              }
+//              let drop_reward_counter = 1;
+//              while (drop_reward_counter <= 5) {
+//                  // WAVE DROPS
+//                  const wave_drops = wave_group[`drop_reward_id_${drop_reward_counter}`];
+//                  if (wave_drops === 0) {
+//                      // ITEM DOES NOT EXIST, CONTINUE...
+//                      drop_reward_counter++;
+//                      continue;
+//                  }
  
-                 // GET ITEMS FROM WAVE DROPS
-                 const enemy_reward = enemy_reward_data[`${wave_drops}`];
-                 if (enemy_reward.reward_id_1 !== 0
-                     && enemy_reward.reward_id_2 !== 0
-                     && enemy_reward.reward_id_3 !== 0
-                     && enemy_reward.reward_id_4 !== 0
-                     && enemy_reward.reward_id_5 !== 0) {
-                     // WAVE GIVES SUBDROPS
-                     data.subdrops = [
-                         {
-                             item: `${enemy_reward.reward_id_1}`,
-                             drop_rate: enemy_reward.odds_1,
-                         },
-                         {
-                             item: `${enemy_reward.reward_id_2}`,
-                             drop_rate: enemy_reward.odds_2,
-                         },
-                         {
-                             item: `${enemy_reward.reward_id_3}`,
-                             drop_rate: enemy_reward.odds_3,
-                         },
-                         {
-                             item: `${enemy_reward.reward_id_4}`,
-                             drop_rate: enemy_reward.odds_4,
-                         },
-                         {
-                             item: `${enemy_reward.reward_id_5}`,
-                             drop_rate: enemy_reward.odds_5,
-                         }
-                     ];
-                 }
-                 else {
-                     let enemy_reward_counter = 1;
-                     while (enemy_reward_counter <= 5) {
-                         const type = enemy_reward[`reward_type_${enemy_reward_counter}`],
-                             id = enemy_reward[`reward_id_${enemy_reward_counter}`],
-                             odds = enemy_reward[`odds_${enemy_reward_counter}`],
-                             item = {
-                                 item: `${id}`,
-                                 drop_rate: odds,
-                             };
-                         if (id === 0) {
-                             // RAN OUT OF ITEMS, GUESS WE CAN LEAVE THE LOOP?
-                             break;
-                         }
+//                  // GET ITEMS FROM WAVE DROPS
+//                  const enemy_reward = enemy_reward_data[`${wave_drops}`];
+//                  if (enemy_reward.reward_id_1 !== 0
+//                      && enemy_reward.reward_id_2 !== 0
+//                      && enemy_reward.reward_id_3 !== 0
+//                      && enemy_reward.reward_id_4 !== 0
+//                      && enemy_reward.reward_id_5 !== 0) {
+//                      // WAVE GIVES SUBDROPS
+//                      data.subdrops = [
+//                          {
+//                              item: `${enemy_reward.reward_id_1}`,
+//                              drop_rate: enemy_reward.odds_1,
+//                          },
+//                          {
+//                              item: `${enemy_reward.reward_id_2}`,
+//                              drop_rate: enemy_reward.odds_2,
+//                          },
+//                          {
+//                              item: `${enemy_reward.reward_id_3}`,
+//                              drop_rate: enemy_reward.odds_3,
+//                          },
+//                          {
+//                              item: `${enemy_reward.reward_id_4}`,
+//                              drop_rate: enemy_reward.odds_4,
+//                          },
+//                          {
+//                              item: `${enemy_reward.reward_id_5}`,
+//                              drop_rate: enemy_reward.odds_5,
+//                          }
+//                      ];
+//                  }
+//                  else {
+//                      let enemy_reward_counter = 1;
+//                      while (enemy_reward_counter <= 5) {
+//                          const type = enemy_reward[`reward_type_${enemy_reward_counter}`],
+//                              id = enemy_reward[`reward_id_${enemy_reward_counter}`],
+//                              odds = enemy_reward[`odds_${enemy_reward_counter}`],
+//                              item = {
+//                                  item: `${id}`,
+//                                  drop_rate: odds,
+//                              };
+//                          if (id === 0) {
+//                              // RAN OUT OF ITEMS, GUESS WE CAN LEAVE THE LOOP?
+//                              break;
+//                          }
  
-                         if (type === 4) {
-                             // DROP IS AN EQUIPMENT
-                             data.drops.push(item);
-                         }
-                         else if (type === 2 && id.toString().substring(0, 1) === '3') {
-                             // DROP IS AN ITEM AND IS A MEMORY PIECE
-                             data.memory_piece = item;
-                         }
-                         enemy_reward_counter++;
-                     }
-                 }
-                 drop_reward_counter++;
-             }
-             return data;
-         }
+//                          if (type === 4) {
+//                              // DROP IS AN EQUIPMENT
+//                              data.drops.push(item);
+//                          }
+//                          else if (type === 2 && id.toString().substring(0, 1) === '3') {
+//                              // DROP IS AN ITEM AND IS A MEMORY PIECE
+//                              data.memory_piece = item;
+//                          }
+//                          enemy_reward_counter++;
+//                      }
+//                  }
+//                  drop_reward_counter++;
+//              }
+//              return data;
+//          }
  
-         function add_quest_entry(quest) {
-             // GET QUEST DROPS
-             let quest_drops = get_quest_drops({}, wave_group_data[`${quest.wave_group_id_1}`]);
-             quest_drops = get_quest_drops(quest_drops, wave_group_data[`${quest.wave_group_id_2}`]);
-             quest_drops = get_quest_drops(quest_drops, wave_group_data[`${quest.wave_group_id_3}`]);
+//          function add_quest_entry(quest) {
+//              // GET QUEST DROPS
+//              let quest_drops = get_quest_drops({}, wave_group_data[`${quest.wave_group_id_1}`]);
+//              quest_drops = get_quest_drops(quest_drops, wave_group_data[`${quest.wave_group_id_2}`]);
+//              quest_drops = get_quest_drops(quest_drops, wave_group_data[`${quest.wave_group_id_3}`]);
  
-             // INIT QUEST ENTRY
-             data[quest.key] = {
-                 name: quest.name,
-                 stamina: quest.stamina,
-                 memory_piece: quest_drops.memory_piece,
-                 drops: quest_drops.drops,
-                 subdrops: quest_drops.subdrops,
-             };
-         }
-     });
- }
+//              // INIT QUEST ENTRY
+//              data[quest.key] = {
+//                  name: quest.name,
+//                  stamina: quest.stamina,
+//                  memory_piece: quest_drops.memory_piece,
+//                  drops: quest_drops.drops,
+//                  subdrops: quest_drops.subdrops,
+//              };
+//          }
+//      });
+//  }
  
- function write_event_quest(quest_data) {
-     /**
-      * DATABASE NOTES
-      *
-      * shiori_quest:
-      *  COLUMNS: quest_ids, event_id, names, stamina, drop_reward_id, drop_reward_odds
-      */
-     return new Promise(async function(resolve) {
-         let result;
-         let db = await open({
-             filename: path.join(DIRECTORY.DATABASE, 'master_jp.db'),
-             driver: sqlite3.Database
-         });
-         const drops = [
-             {
-                 "item": "999999",
-                 "drop_rate": 0
-             },
-             {
-                 "item": "999999",
-                 "drop_rate": 0
-             },
-             {
-                 "item": "999999",
-                 "drop_rate": 0
-             },
-         ];
-         const subdrops = [
-             {
-                 "item": "999999",
-                 "drop_rate": 0
-             },
-             {
-                 "item": "999999",
-                 "drop_rate": 0
-             },
-             {
-                 "item": "999999",
-                 "drop_rate": 0
-             },
-             {
-                 "item": "999999",
-                 "drop_rate": 0
-             },
-             {
-                 "item": "999999",
-                 "drop_rate": 0
-             },
-         ];
-         result = await db.all('SELECT * FROM shiori_quest');
-         result.forEach((row) => {
-             if (row.drop_reward_id === 0) {
-                 return;
-             }
-             const name = row.quest_name,
-                 number = name.substring(name.indexOf('-') + 1);
-             quest_data[`${row.event_id - 20000}-${number}E`] = {
-                 name,
-                 stamina: row.stamina,
-                 memory_piece: {
-                     item: row.drop_reward_id,
-                     drop_rate: row.drop_reward_odds,
-                 },
-                 drops,
-                 subdrops,
-             }
-         });
-         db.close().finally(() => {
-             resolve(quest_data);
-         });
-     });
- }
+//  function write_event_quest(quest_data) {
+//      /**
+//       * DATABASE NOTES
+//       *
+//       * shiori_quest:
+//       *  COLUMNS: quest_ids, event_id, names, stamina, drop_reward_id, drop_reward_odds
+//       */
+//      return new Promise(async function(resolve) {
+//          let result;
+//          let db = await open({
+//              filename: path.join(DIRECTORY.DATABASE, 'master_jp.db'),
+//              driver: sqlite3.Database
+//          });
+//          const drops = [
+//              {
+//                  "item": "999999",
+//                  "drop_rate": 0
+//              },
+//              {
+//                  "item": "999999",
+//                  "drop_rate": 0
+//              },
+//              {
+//                  "item": "999999",
+//                  "drop_rate": 0
+//              },
+//          ];
+//          const subdrops = [
+//              {
+//                  "item": "999999",
+//                  "drop_rate": 0
+//              },
+//              {
+//                  "item": "999999",
+//                  "drop_rate": 0
+//              },
+//              {
+//                  "item": "999999",
+//                  "drop_rate": 0
+//              },
+//              {
+//                  "item": "999999",
+//                  "drop_rate": 0
+//              },
+//              {
+//                  "item": "999999",
+//                  "drop_rate": 0
+//              },
+//          ];
+//          result = await db.all('SELECT * FROM shiori_quest');
+//          result.forEach((row) => {
+//              if (row.drop_reward_id === 0) {
+//                  return;
+//              }
+//              const name = row.quest_name,
+//                  number = name.substring(name.indexOf('-') + 1);
+//              quest_data[`${row.event_id - 20000}-${number}E`] = {
+//                  name,
+//                  stamina: row.stamina,
+//                  memory_piece: {
+//                      item: row.drop_reward_id,
+//                      drop_rate: row.drop_reward_odds,
+//                  },
+//                  drops,
+//                  subdrops,
+//              }
+//          });
+//          db.close().finally(() => {
+//              resolve(quest_data);
+//          });
+//      });
+//  }
  
 
  function get_new_images(data) {
