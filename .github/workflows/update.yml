@@ -66,9 +66,7 @@ jobs:
           git config user.name $user_name
           git config user.email $user_email
           
-          git add ./public/version
           git add ./public/data.json
-          git add ./public/data.min.json
           git add ./public/images/**/*.png
 
           git diff-index --quiet HEAD || git commit -m "[Bot] Data Update" -m '
