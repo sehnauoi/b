@@ -30,7 +30,7 @@
          VERY_HARD: "13",
      }
  });
- const OTHER_REGIONS = Object.freeze(["CN", "EN", "KR", "TW"]);
+ const OTHER_REGIONS = Object.freeze(["EN"]);
  
  run();
  async function run() {
@@ -606,7 +606,7 @@
                      id: `${row.unit_id}`,
                      name: {
                          JP: row.unit_name,
-                         EN: row.unit_name
+                         [region]: row.unit_name
                      },
                  };
              });
