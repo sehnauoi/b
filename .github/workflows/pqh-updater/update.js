@@ -562,7 +562,6 @@
                  name: {
                      JP: row.unit_name
                  },
-                 equipment: {},
              };
          });
  
@@ -572,7 +571,7 @@
              if (!data[`${row.unit_id}`]) {
                  return;
              }
-             data[`${row.unit_id}`].equipment[`rank_${row.promotion_level}`] = [
+             data[`${row.unit_id}`][`rank_${row.promotion_level}`] = [
                  `${row.equip_slot_1}`,
                  `${row.equip_slot_2}`,
                  `${row.equip_slot_3}`,
@@ -591,7 +590,7 @@
          for (const region of OTHER_REGIONS) {
              db.close();
              db = await open({
-                 filename: path.join(DIRECTORY.DATABASE, `master_${region.toLowerCase()}.db`),
+                 filename: path.join(DIRECTORY.DATABASE, `master_en.db`),
                  driver: sqlite3.Database
              });
  
@@ -609,7 +608,6 @@
                          JP: row.unit_name,
                          [region]: row.unit_name
                      },
-                     equipment: {},
                  };
              });
  
@@ -618,11 +616,11 @@
                  if (!data[`${row.unit_id}`]) {
                      return;
                  }
-                 if (data[`${row.unit_id}`].equipment[`rank_${row.promotion_level}`]) {
+                 if (data[`${row.unit_id}`][`rank_${row.promotion_level}`]) {
                      return;
                  }
                  // console.log(`ADDING REGION LIMITED CHARACTER EQUIPS FOR ${row.unit_id} RANK ${row.promotion_level}`);
-                 data[`${row.unit_id}`].equipment[`rank_${row.promotion_level}`] = [
+                 data[`${row.unit_id}`][`rank_${row.promotion_level}`] = [
                      `${row.equip_slot_1}`,
                      `${row.equip_slot_2}`,
                      `${row.equip_slot_3}`,
@@ -642,7 +640,7 @@
  
          function purge_no_equips() {
              for (const key in data) {
-                 if (Object.keys(data[key].equipment).length === 0) {
+                 if (Object.keys(data[key]).length === 0) {
                      delete data[key];
                  }
              }
