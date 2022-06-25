@@ -49,15 +49,14 @@ jobs:
           mkdir raw
           ls
           cd ../..
-
         
       - name: Run update.js
         id: update
         run: node ./.github/workflows/pqh-updater/update.js
           
-      - name: Run card.py
-        if: ${{ steps.update.outputs.success == 'true' }}
-        run: python ./public/images/cards.py
+#       - name: Run card.py
+#         if: ${{ steps.update.outputs.success == 'true' }}
+#         run: python ./public/images/cards.py
 
       # assuming there are new changes
       - name: Update images on Git
@@ -68,7 +67,6 @@ jobs:
           
           git add ./public/version
           git add ./public/images/**/*.png
-          git add ./.github/workflows/pqh-updater/database
 
           git diff-index --quiet HEAD || git commit -m "[Bot] Data Update" -m '
           ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
