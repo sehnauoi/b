@@ -1010,6 +1010,29 @@
                  queue.push(`equipment_${fragment_id}`);
              }
          }
+
+        // CHECK INVALID EQUIPMENT
+         console.log("SEARCHING FOR MISSING ITEM IMAGES...");
+         for (const key in data.equipment) {
+             const equipment = data.equipment[key],
+                 id = equipment.id,
+                 fragment_id = equipment.fragment.id;
+             // CHECK IF IMAGE ALREADY EXISTS
+             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'invalid_items', `${id}.png`))) {
+                 if (id.substring(0, 2) === "31" || id.substring(0, 2) === "32") {
+                     // EQUIPMENT IS A MEMORY PIECE
+                     queue.push(`item_invalid${id}`);
+                 }
+                 else {
+                     // REGULAR ITEM, BUSINESS AS USUAL
+                     queue.push(`equipment_invalid${id}`);
+                 }
+             }
+             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'invalid_items', `${fragment_id}.png`)) && fragment_id !== "999999") {
+                 queue.push(`equipment_invalid${fragment_id}`);
+             }
+         }
+
          queue.push(`equipment_999999`);
  
          // CHECK CHARACTERS ICON 3 & 6 star
@@ -1083,8 +1106,8 @@
                          file_data = manifest.substring(index, line_end).split(','),
                          type = file_name.includes('equipment') || file_name.includes('item')
                          ? 'items' // equipment || item
-                        //  : file_name.includes('bg_still_unit_')
-                        //  ? 'cards' // bg_still_unit_
+                         : file_name.includes('equipment_invalid') || file_name.includes('item_invalid')
+                         ? 'invalid_items' // equipment_invalid || item_invalid
                          : file_name.includes('skill')
                          ? 'skill' // icon_icon_skill
                          : 'unit_icon', // unit
