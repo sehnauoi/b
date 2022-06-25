@@ -1010,6 +1010,7 @@
                  queue.push(`equipment_${fragment_id}`);
              }
          }
+         queue.push(`equipment_999999`);
  
          // CHECK CHARACTERS ICON 3 & 6 star
          console.log("SEARCHING FOR MISSING 3 & 6 STAR CHARACTERS ICON...");
