@@ -446,7 +446,7 @@
          for (const region of OTHER_REGIONS) {
              db.close();
              db = await open({
-                 filename: path.join(DIRECTORY.DATABASE, `master_${region.toLowerCase()}.db`),
+                 filename: path.join(DIRECTORY.DATABASE, `master_en.db`),
                  driver: sqlite3.Database
              });
  
