@@ -47,6 +47,8 @@ jobs:
         run: |
           cd public/images/
           mkdir raw
+          mkdir item
+          mkdir invalid_items
           ls
           cd ../..
         
