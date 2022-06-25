@@ -124,11 +124,11 @@
  function download(latest) {
      return new Promise(async (resolve) => {
          await Promise.all([
-             dl("cn"),
+            //  dl("cn"),
              dl("en"),
              dl("jp"),
-             dl("kr"),
-             dl("tw"),
+            //  dl("kr"),
+            //  dl("tw"),
              dl_manifest(),
          ]);
          resolve(
@@ -606,7 +606,7 @@
                      id: `${row.unit_id}`,
                      name: {
                          JP: row.unit_name,
-                         [region]: row.unit_name
+                         EN: row.unit_name
                      },
                  };
              });
