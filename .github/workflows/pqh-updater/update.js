@@ -132,11 +132,11 @@
              dl_manifest(),
          ]);
          resolve(
-             fs.existsSync(path.join(DIRECTORY.DATABASE, `master_cn.db`)) &&
+//              fs.existsSync(path.join(DIRECTORY.DATABASE, `master_cn.db`)) &&
              fs.existsSync(path.join(DIRECTORY.DATABASE, `master_en.db`)) &&
              fs.existsSync(path.join(DIRECTORY.DATABASE, `master_jp.db`)) &&
-             fs.existsSync(path.join(DIRECTORY.DATABASE, `master_kr.db`)) &&
-             fs.existsSync(path.join(DIRECTORY.DATABASE, `master_tw.db`)) &&
+//              fs.existsSync(path.join(DIRECTORY.DATABASE, `master_kr.db`)) &&
+//              fs.existsSync(path.join(DIRECTORY.DATABASE, `master_tw.db`)) &&
              fs.existsSync(path.join(DIRECTORY.DATABASE, `manifest`))
          );
      });
@@ -562,7 +562,7 @@
                  name: {
                      JP: row.unit_name
                  },
-                 equipment: {},
+//                  equipment: {},
              };
          });
  
@@ -572,7 +572,7 @@
              if (!data[`${row.unit_id}`]) {
                  return;
              }
-             data[`${row.unit_id}`].equipment[`rank_${row.promotion_level}`] = [
+             data[`${row.unit_id}`].data[`rank_${row.promotion_level}`] = [
                  `${row.equip_slot_1}`,
                  `${row.equip_slot_2}`,
                  `${row.equip_slot_3}`,
