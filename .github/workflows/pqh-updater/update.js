@@ -562,7 +562,7 @@
                  name: {
                      JP: row.unit_name
                  },
-//                  equipment: {},
+                 equipment: {},
              };
          });
  
