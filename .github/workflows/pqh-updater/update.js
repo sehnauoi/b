@@ -30,7 +30,7 @@
          VERY_HARD: "13",
      }
  });
- const OTHER_REGIONS = Object.freeze(["EN"]);
+//  const OTHER_REGIONS = Object.freeze(["EN"]);
  
  run();
  async function run() {
@@ -125,7 +125,7 @@
      return new Promise(async (resolve) => {
          await Promise.all([
             //  dl("cn"),
-             dl("en"),
+            //  dl("en"),
              dl("jp"),
             //  dl("kr"),
             //  dl("tw"),
@@ -133,7 +133,7 @@
          ]);
          resolve(
 //              fs.existsSync(path.join(DIRECTORY.DATABASE, `master_cn.db`)) &&
-             fs.existsSync(path.join(DIRECTORY.DATABASE, `master_en.db`)) &&
+            //  fs.existsSync(path.join(DIRECTORY.DATABASE, `master_en.db`)) &&
              fs.existsSync(path.join(DIRECTORY.DATABASE, `master_jp.db`)) &&
 //              fs.existsSync(path.join(DIRECTORY.DATABASE, `master_kr.db`)) &&
 //              fs.existsSync(path.join(DIRECTORY.DATABASE, `master_tw.db`)) &&
