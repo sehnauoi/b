@@ -323,10 +323,10 @@
          // CHECK BOSS ICON
          console.log("SEARCHING FOR MISSING BOSS ICON...");
          for (const key in data.boss) {
-            const a_0 = `${key.substring(0, 5)}1`;
+            const a_0 = `${key.substring(0, 5)}2`;
                         
              // CHECK IF IMAGE ALREADY EXISTS
-             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key.substring(0, 5)}1.png`))) {
+             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key.substring(0, 5)}2.png`))) {
                 queue.push(`unit_${a_0}`);
             }
          }  
