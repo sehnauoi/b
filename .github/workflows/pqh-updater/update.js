@@ -63,8 +63,8 @@
      const unit_data = await get_unit_data();
      data.unit = unit_data;
 
-     const boss_data = await get_boss_data();
-     data.boss = boss_data;
+    //  const boss_data = await get_boss_data();
+    //  data.boss = boss_data;
 
      const skill_data = await get_skill_data();
      data.skill = skill_data;
@@ -198,26 +198,26 @@
      }
  }
 
- function get_boss_data() {
-    return new Promise(async function(resolve) {
-        let result, data = {};
-        let db = await open({
-            filename: path.join(DIRECTORY.DATABASE, 'master_jp.db'),
-            driver: sqlite3.Database
-        });
-        result = await db.all('SELECT * FROM enemy_parameter WHERE unit_id BETWEEN 300000 AND 309100');
-        result.forEach((row) => {
-            data[`${row.unit_id}`] = {
-                id: `${row.unit_id}`,
-            };
-        });
+//  function get_boss_data() {
+//     return new Promise(async function(resolve) {
+//         let result, data = {};
+//         let db = await open({
+//             filename: path.join(DIRECTORY.DATABASE, 'master_jp.db'),
+//             driver: sqlite3.Database
+//         });
+//         result = await db.all('SELECT * FROM enemy_parameter WHERE unit_id BETWEEN 300000 AND 309100');
+//         result.forEach((row) => {
+//             data[`${row.unit_id}`] = {
+//                 id: `${row.unit_id}`,
+//             };
+//         });
             
-         // FINISH
-         db.close().finally(() => {
-             resolve(data);
-         });
- })
- } 
+//          // FINISH
+//          db.close().finally(() => {
+//              resolve(data);
+//          });
+//  })
+//  } 
 
  function get_unit_data() {
     return new Promise(async function(resolve) {
@@ -320,16 +320,17 @@
             }
          }
 
-         // CHECK BOSS ICON
-         console.log("SEARCHING FOR MISSING BOSS ICON...");
-         for (const key in data.boss) {
-            const a_0 = `${key.substring(0, 5)}2`;
+        //  // CHECK BOSS ICON
+        //  console.log("SEARCHING FOR MISSING BOSS ICON...");
+        //  for (const key in data.boss) {
+        //     const a_0 = `${key.substring(0, 5)}2`;
                         
-             // CHECK IF IMAGE ALREADY EXISTS
-             if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key.substring(0, 5)}2.png`))) {
-                queue.push(`unit_${a_0}`);
-            }
-         }  
+        //      // CHECK IF IMAGE ALREADY EXISTS
+        //      if (!fs.existsSync(path.join(DIRECTORY.IMAGE_OUTPUT, 'unit_icon', `${key.substring(0, 5)}2.png`))) {
+        //         queue.push(`unit_${a_0}`);
+        //     }
+        //  }  
+        
          // EXTRACT IF THERE ARE NEW FILES
          if (queue.length <= 0) {
              console.log("NO MISSING IMAGES FOUND.");
